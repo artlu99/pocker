@@ -1,0 +1,14 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "pocker",
+	"main": "backend/index.ts",
+	"compatibility_date": "2025-05-08",
+	"assets": { "not_found_handling": "single-page-application" },
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "8f6e1a3fdc834da79a87927346608e8f"
+		}
+	],
+	"observability": { "enabled": true }
+}

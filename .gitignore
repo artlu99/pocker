@@ -1,0 +1,9 @@
+node_modules
+dist
+*.local
+.vscode
+bun.lock
+
+# wrangler files
+.wrangler
+.dev.vars*

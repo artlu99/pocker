@@ -1,0 +1,79 @@
+/* 文档页面核心动画和特殊效果 */
+
+/* 动画时间变量 */
+:root {
+    --animation-duration: 0.5s;
+    --animation-delay-step: 0.1s;
+  }
+  
+  /* 基础动画类 */
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn var(--animation-duration) ease forwards;
+  }
+  
+  .fade-in-up {
+    opacity: 0;
+    animation: fadeInUp var(--animation-duration) ease forwards;
+  }
+  
+  /* 动画延迟类 */
+  .delay-1 {
+    animation-delay: calc(var(--animation-delay-step) * 1);
+  }
+  .delay-2 {
+    animation-delay: calc(var(--animation-delay-step) * 2);
+  }
+  .delay-3 {
+    animation-delay: calc(var(--animation-delay-step) * 3);
+  }
+  .delay-4 {
+    animation-delay: calc(var(--animation-delay-step) * 4);
+  }
+  
+  /* 详情组件开关动画 */
+  details[open] .summary svg {
+    transform: rotate(90deg);
+  }
+  
+  details[open] .content {
+    animation: slideDown 0.3s ease-out;
+  }
+  
+  /* 悬停缩放效果 - 保留以防Tailwind无法完全替代 */
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+  
+  /* 动画关键帧定义 */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

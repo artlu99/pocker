@@ -1,0 +1,645 @@
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility fade-in {
+  /* 基础动画效果 */
+
+  /* 通用动画类 */
+  animation: fadeIn 0.3s ease forwards;
+  animation-fill-mode: both;
+
+  /* 性能优化 */
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  @media (prefers-reduced-motion: no-preference) {
+    user-select: none;
+  }
+}
+
+@utility animate-fadeIn {
+  animation: fadeIn 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  @media (prefers-reduced-motion: no-preference) {
+    user-select: none;
+  }
+}
+
+@utility fade-in-up {
+  animation: fadeInUp 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  @media (max-width: 768px) {
+    animation-duration: 0.3s;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    user-select: none;
+  }
+}
+
+@utility animate-fadeUp {
+  animation: fadeInUp 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  @media (prefers-reduced-motion: no-preference) {
+    user-select: none;
+  }
+}
+
+@utility fade-in-down {
+  animation: fadeInDown 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  @media (max-width: 768px) {
+    animation-duration: 0.3s;
+  }
+}
+
+@utility scale-in {
+  animation: scaleIn 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  @media (prefers-reduced-motion: no-preference) {
+    user-select: none;
+  }
+}
+
+@utility animate-scaleIn {
+  animation: scaleIn 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  @media (prefers-reduced-motion: no-preference) {
+    user-select: none;
+  }
+}
+
+@utility slide-in-right {
+  animation: slideInRight 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility slide-out-right {
+  animation: slideOutRight 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility fade-out-up {
+  animation: fadeOutUp 0.2s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility stagger-container {
+  /* 容器和项目动画 */
+  opacity: 1;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+@utility stagger-item {
+  animation: staggerFadeInUp 0.3s ease forwards;
+  animation-fill-mode: both;
+  opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  @media (prefers-reduced-motion: no-preference) {
+    user-select: none;
+  }
+}
+
+@utility dialog-content {
+  /* 对话框动画 */
+  animation: scaleIn 0.2s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility hover-scale {
+  /* 悬停效果 */
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  will-change: transform, box-shadow;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+@utility feature-card {
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
+  will-change: transform, box-shadow;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow:
+      0 10px 25px -5px rgba(0, 0, 0, 0.1),
+      0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@utility active-scale {
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+@utility hover-scale-sm {
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@utility title-area {
+  /* 特定页面元素动画 */
+  animation: fadeInUp 0.5s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility title-text {
+  animation: scaleIn 0.5s ease forwards;
+  animation-delay: 200ms;
+  animation-fill-mode: both;
+  opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility subtitle-text {
+  animation: fadeIn 0.5s ease forwards;
+  animation-delay: 300ms;
+  animation-fill-mode: both;
+  opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility button-container {
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 400ms;
+  animation-fill-mode: both;
+  opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility controls-area {
+  animation: fadeInUp 0.4s ease forwards;
+  animation-delay: 500ms;
+  animation-fill-mode: both;
+  opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility filter-area {
+  animation: fadeInUp 0.4s ease forwards;
+  animation-delay: 500ms;
+  animation-fill-mode: both;
+  opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility empty-state {
+  animation: fadeInUp 0.5s ease forwards;
+  animation-delay: 600ms;
+  animation-fill-mode: both;
+  opacity: 0;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility toast-enter {
+  /* Toast通知动画 */
+  animation: fadeInDown 0.3s ease forwards;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility toast-exit {
+  animation: fadeInDown 0.3s ease forwards reverse;
+  animation-fill-mode: both;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+
+@utility delay-100 {
+  /* 动画延迟类 */
+  animation-delay: 100ms;
+}
+
+@utility animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+@utility delay-200 {
+  animation-delay: 200ms;
+}
+
+@utility animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+@utility delay-300 {
+  animation-delay: 300ms;
+}
+
+@utility animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+@utility delay-400 {
+  animation-delay: 400ms;
+}
+
+@utility animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+@utility delay-500 {
+  animation-delay: 500ms;
+}
+
+@utility animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+@utility delay-600 {
+  animation-delay: 600ms;
+}
+
+@utility animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+@utility delay-700 {
+  animation-delay: 700ms;
+}
+
+@utility animation-delay-700 {
+  animation-delay: 700ms;
+}
+
+@utility delay-800 {
+  animation-delay: 800ms;
+}
+
+@utility animation-delay-800 {
+  animation-delay: 800ms;
+}
+
+@utility delay-900 {
+  animation-delay: 900ms;
+}
+
+@utility animation-delay-900 {
+  animation-delay: 900ms;
+}
+
+@utility animation-delay-1000 {
+  animation-delay: 1000ms;
+}
+
+@utility grid-item {
+  @media (max-width: 768px) {
+    animation-duration: 0.3s;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+
+    --foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+
+    --card-foreground: 0 0% 3.9%;
+
+    --popover: 0 0% 100%;
+
+    --popover-foreground: 0 0% 3.9%;
+
+    --primary: 0 0% 9%;
+
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96.1%;
+
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 96.1%;
+
+    --muted-foreground: 0 0% 45.1%;
+
+    --accent: 0 0% 96.1%;
+
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 89.8%;
+
+    --input: 0 0% 89.8%;
+
+    --ring: 0 0% 3.9%;
+
+    --chart-1: 12 76% 61%;
+
+    --chart-2: 173 58% 39%;
+
+    --chart-3: 197 37% 24%;
+
+    --chart-4: 43 74% 66%;
+
+    --chart-5: 27 87% 67%;
+
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: 0 0% 3.9%;
+
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 3.9%;
+
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 14.9%;
+
+    --muted-foreground: 0 0% 63.9%;
+
+    --accent: 0 0% 14.9%;
+
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+
+    --input: 0 0% 14.9%;
+
+    --ring: 0 0% 83.1%;
+
+    --chart-1: 220 70% 50%;
+
+    --chart-2: 160 60% 45%;
+
+    --chart-3: 30 80% 55%;
+
+    --chart-4: 280 65% 60%;
+
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideOutRight {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+  }
+
+  @keyframes fadeOutUp {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes staggerFadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 移动设备优化 */
+
+  /* 减少动画 */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      animation-delay: 0ms !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  /* 阻止动画期间选择文本，提高性能 */
+
+  /* 提高浏览器渲染性能 */
+  html,
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

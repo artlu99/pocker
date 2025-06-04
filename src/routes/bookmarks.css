@@ -1,0 +1,26 @@
+/* 此文件中的动画和效果已移至 src/components/animations.css */
+/* 仅保留页面特定的样式 */
+
+/* 页面特有的动画类或扩展可以放在这里 */
+.demo-banner {
+    animation: fadeInDown 0.5s ease forwards;
+    animation-fill-mode: both;
+  }
+  
+  .bookmarklet-button {
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: 500ms;
+    animation-fill-mode: both;
+    opacity: 0;
+  }
+  
+  .grid-container {
+    opacity: 1;
+  }
+  
+  .grid-item {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-fill-mode: both;
+  }
+  
