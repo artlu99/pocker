@@ -7,11 +7,13 @@ import { initReactI18next } from "react-i18next";
 import App from "./App.tsx";
 import { ToastProvider } from "./components/toast-provider.tsx";
 import en from "./i18n/en.json";
+import es from "./i18n/es.json";
 import zh from "./i18n/zh.json";
 import "./index.css";
 
 const resources = {
 	en: { translation: en },
+	es: { translation: es },
 	zh: { translation: zh },
 };
 

@@ -1,0 +1,198 @@
+{
+    "HomePage": {
+      "quickstart": "Empieza rápido",
+      "title": "Administrador de Marcadores Universal",
+      "description": "Guarda y organiza tus marcadores con un solo clic. Accede a ellos en cualquier momento y dispositivo.",
+      "features": {
+        "save": {
+          "title": "Guarda en un solo clic",
+          "desc": "Guarda cualquier página web en tu colección con una simple instalación de arrastrar y soltar."
+        },
+        "categorize": {
+          "title": "Categorías inteligentes",
+          "desc": "Categoriza automáticamente tus marcadores para una mejor organización."
+        },
+        "access": {
+          "title": "Acceso en cualquier lugar",
+          "desc": "Sincroniza entre dispositivos, accede a tus marcadores en cualquier momento."
+        },
+        "share": {
+          "title": "Comparte y colabora",
+          "desc": "Comparte fácilmente colecciones de marcadores y colabora con otros."
+        }
+      }
+    },
+    "NotFoundPage": {
+      "title": "404: Esta página no se encontró.",
+      "errorCode": "404",
+      "description": "Esta página no se encontró."
+    },
+    "DocPage": {
+      "title": "Pocker Empieza Rápido",
+      "description": "Herramienta de gestión de marcadores local-first, multi-dispositivo y multi-navegador",
+      "loading": "Cargando...",
+      "intro": {
+        "title": "¿Qué es Pocker?",
+        "description": "Pocker es una herramienta de gestión de marcadores local-first que te permite guardar y organizar marcadores web con un solo clic y acceder a ellos desde cualquier dispositivo.",
+        "features": {
+          "title": "Características clave",
+          "local-first": "Almacenamiento local-first para acceso multi-dispositivo",
+          "sorting": "Ordenación y opciones de diseño",
+          "multilingual": "Soporte para interfaz multi-idioma"
+        }
+      },
+      "setup": {
+        "title": "Configura tu Bookmarklet",
+        "markName": {
+          "title": "Configura tu nombre de marcador",
+          "placeholder": "Nombre tu ID de marcador",
+          "description": "Este nombre se usará para tu colección de marcadores y solo puede contener letras, números, guiones bajos y guiones.",
+          "button": "Generar aleatorio"
+        },
+        "bookmarklet": {
+          "title": "Instala la herramienta de marcador",
+          "saveButton": "Guardar en {mark}",
+          "openButton": "Abrir {mark} Marcadores",
+          "dragTip": "Arrastra a la barra de marcadores",
+          "description": "Arrastra el botón anterior a la barra de marcadores de tu navegador para guardar la página web actual en cualquier momento."
+        },
+        "code": {
+          "title": "Ver el código del Bookmarklet",
+          "copied": "Copiado"
+        }
+      },
+      "usage": {
+        "title": "¿Cómo usar Pocker?",
+        "steps": {
+          "setup": {
+            "title": "Configura tu Bookmarklet",
+            "description": "Sigue las instrucciones anteriores para crear el nombre de tu colección de marcadores y añadir el bookmarklet a la barra de marcadores de tu navegador. Cada nombre de colección de marcadores corresponde a una colección de marcadores separada."
+          },
+          "save": {
+            "title": "Guardar páginas web en tu colección",
+            "description": "Cuando navegues por una página web, haz clic en el bookmarklet de Pocker en la barra de marcadores para abrir la página de añadir marcadores. Rellena la categoría y la descripción (opcional) y guarda."
+          },
+          "access": {
+            "title": "Accede a tu colección de marcadores",
+            "description": "Accede a {baseUrl}/{mark} para ver y gestionar todos tus marcadores guardados. Puedes acceder a esta URL desde cualquier dispositivo o navegador."
+          },
+          "manage": {
+            "title": "Organiza y gestiona tus marcadores",
+            "description": "Puedes editar o eliminar marcadores, cambiar las vistas de categoría, ordenar por diferentes criterios y usar filtros de categoría para encontrar rápidamente los marcadores que necesitas."
+          }
+        }
+      },
+      "demo": {
+        "title": "¿Quieres experimentar Pocker?",
+        "description": "Prueba todas las características de Pocker sin crear una colección de marcadores",
+        "button": "Ver demo"
+      },
+      "navigation": {
+        "intro": "Introducción",
+        "setup": "Configuración",
+        "usage": "Uso",
+        "demo": "Demo"
+      }
+    },
+    "Navigation": {
+      "quickstart": "Empieza rápido",
+      "github": "GitHub",
+      "switchLanguage": "Cambiar idioma"
+    },
+    "BookmarksPage": {
+      "title": "Marcadores",
+      "collection": "Colección {mark}",
+      "addBookmark": "Añadir marcador",
+      "noBookmarks": "No hay marcadores todavía",
+      "addFirstBookmark": "Añade tu primer marcador",
+      "loading": "Cargando marcadores...",
+      "bookmarkletTip": "Arrastra este botón a la barra de marcadores para guardar páginas con un solo clic",
+      "saveButton": "Guardar en {mark}",
+      "dragTip": "Arrastra a la barra de marcadores",
+      "demoMode": "Modo demo",
+      "demoDescription": "Esta es una colección de demostración. Puedes añadir, editar y eliminar marcadores libremente. Todos los cambios solo afectarán a tu vista local y no se guardarán en el servidor.",
+      "createOwn": "Crea tu propia",
+      "success": "Éxito",
+      "error": "Error",
+      "warning": "Advertencia",
+      "info": "Información"
+    },
+    "Components": {
+      "MarkInput": {
+        "label": "Marcador",
+        "placeholder": "Introduce tu marcador",
+        "randomButton": "Aleatorio",
+        "description": "El marcador se usará para distinguir diferentes colecciones de marcadores. Se recomienda usar frases significativas. Marcador actual: "
+      },
+      "BookmarkCard": {
+        "visit": "Visitar",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "deleteConfirm": "¿Estás seguro de querer eliminar este marcador?"
+      },
+      "BookmarkDialog": {
+        "addTitle": "Añadir marcador",
+        "addDescription": "Añade un nuevo marcador a la colección {mark}",
+        "editTitle": "Editar marcador",
+        "editDescription": "Editar información del marcador",
+        "deleteTitle": "Eliminar marcador",
+        "deleteDescription": "¿Estás seguro de querer eliminar el marcador \"{title}\"?",
+        "deleteConfirmation": "Esta acción no se puede deshacer. El marcador se eliminará permanentemente de tu colección.",
+        "url": "URL",
+        "urlPlaceholder": "Introduce la URL del marcador",
+        "urlDescription": "La URL de la página web que quieres marcar",
+        "title": "Título",
+        "titlePlaceholder": "Introduce el título del marcador",
+        "titleDescription": "Un título descriptivo para tu marcador",
+        "description": "Descripción",
+        "descriptionPlaceholder": "Introduce la descripción del marcador (opcional)",
+        "descriptionDescription": "Añade algunas notas sobre este marcador",
+        "category": "Categoría",
+        "categoryPlaceholder": "Selecciona una categoría",
+        "categoryDescription": "Elige una categoría para organizar tus marcadores",
+        "newCategory": "Nueva categoría",
+        "newCategoryPlaceholder": "Introduce el nombre de la nueva categoría",
+        "existingCategory": "Categorías existentes",
+        "backToCategories": "Volver a categorías",
+        "cancel": "Cancelar",
+        "reset": "Restablecer",
+        "addButton": "Añadir marcador",
+        "updateButton": "Actualizar marcador",
+        "deleteButton": "Eliminar marcador",
+        "adding": "Añadiendo...",
+        "updating": "Actualizando...",
+        "deleting": "Eliminando...",
+        "addSuccess": "Marcador añadido correctamente",
+        "updateSuccess": "Marcador actualizado correctamente",
+        "deleteSuccess": "Marcador eliminado correctamente",
+        "errors": {
+          "urlRequired": "URL requerida",
+          "invalidUrl": "Por favor, introduce una URL válida",
+          "categoryRequired": "Categoría requerida",
+          "addFailed": "Error al añadir marcador",
+          "updateFailed": "Error al actualizar marcador",
+          "deleteFailed": "Error al eliminar marcador"
+        },
+        "addBookmark": "Añadir marcador",
+        "delete": "Eliminar marcador",
+        "edit": "Editar marcador"
+      },
+      "FloatingNav": {
+        "title": "Categorías",
+        "expandNav": "Expandir navegación",
+        "collapseNav": "Colapsar navegación",
+        "jumpToCategory": "Ir a {category}"
+      }
+    },
+    "Notifications": {
+      "success": "Éxito",
+      "error": "Error",
+      "warning": "Advertencia",
+      "info": "Información",
+      "bookmarkAdded": "Marcador añadido correctamente",
+      "bookmarkExists": "Marcador con esta URL ya existe",
+      "urlRequired": "URL requerida",
+      "processingError": "Error al procesar marcador"
+    }
+  }
+  
