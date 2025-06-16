@@ -54,8 +54,8 @@
         },
         "bookmarklet": {
           "title": "Install Bookmark Tool",
-          "saveButton": "Save to {mark}",
-          "openButton": "Open {mark} Bookmarks",
+          "saveButton": "Save to {{mark}}",
+          "openButton": "Open {{mark}} Bookmarks",
           "dragTip": "Drag to bookmark bar",
           "description": "Drag the button above to your browser's bookmark bar to save the current webpage anytime."
         },
@@ -77,7 +77,7 @@
           },
           "access": {
             "title": "Access Your Bookmark Collection",
-            "description": "Access {baseUrl}/{mark} to view and manage all your saved bookmarks. You can access this URL from any device or browser."
+            "description": "Access {{baseUrl}}/{{mark}} to view and manage all your saved bookmarks. You can access this URL from any device or browser."
           },
           "manage": {
             "title": "Organize and Manage Your Bookmarks",
@@ -104,13 +104,13 @@
     },
     "BookmarksPage": {
       "title": "Bookmarks",
-      "collection": "Collection {mark}",
+      "collection": "Collection {{mark}}",
       "addBookmark": "Add Bookmark",
       "noBookmarks": "No bookmarks yet",
       "addFirstBookmark": "Add your first bookmark",
       "loading": "Loading bookmarks...",
       "bookmarkletTip": "Drag this button to your bookmarks bar to save pages with one click",
-      "saveButton": "Save to {mark}",
+      "saveButton": "Save to {{mark}}",
       "dragTip": "Drag to bookmarks bar",
       "demoMode": "Demo Mode",
       "demoDescription": "This is a demo collection. You can freely add, edit, and delete bookmarks. All changes will only affect your local view and won't be saved to the server.",
@@ -135,7 +135,7 @@
       },
       "BookmarkDialog": {
         "addTitle": "Add Bookmark",
-        "addDescription": "Add a new bookmark to collection {mark}",
+        "addDescription": "Add a new bookmark to collection {{mark}}",
         "editTitle": "Edit Bookmark",
         "editDescription": "Edit bookmark information",
         "deleteTitle": "Delete Bookmark",
@@ -184,7 +184,7 @@
         "title": "Categories",
         "expandNav": "Expand Navigation",
         "collapseNav": "Collapse Navigation",
-        "jumpToCategory": "Jump to {category}"
+        "jumpToCategory": "Jump to {{category}}"
       }
     },
     "Notifications": {

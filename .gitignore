@@ -7,3 +7,5 @@ bun.lock
 # wrangler files
 .wrangler
 .dev.vars*
+
+TODO.md

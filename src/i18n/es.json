@@ -51,8 +51,8 @@
         },
         "bookmarklet": {
           "title": "Instala la herramienta de marcador",
-          "saveButton": "Guardar en {mark}",
-          "openButton": "Abrir {mark} Marcadores",
+          "saveButton": "Guardar en {{mark}}",
+          "openButton": "Abrir {{mark}} Marcadores",
           "dragTip": "Arrastra a la barra de marcadores",
           "description": "Arrastra el botón anterior a la barra de marcadores de tu navegador para guardar la página web actual en cualquier momento."
         },
@@ -74,7 +74,7 @@
           },
           "access": {
             "title": "Accede a tu colección de marcadores",
-            "description": "Accede a {baseUrl}/{mark} para ver y gestionar todos tus marcadores guardados. Puedes acceder a esta URL desde cualquier dispositivo o navegador."
+            "description": "Accede a {{baseUrl}}/{{mark}} para ver y gestionar todos tus marcadores guardados. Puedes acceder a esta URL desde cualquier dispositivo o navegador."
           },
           "manage": {
             "title": "Organiza y gestiona tus marcadores",
@@ -101,13 +101,13 @@
     },
     "BookmarksPage": {
       "title": "Marcadores",
-      "collection": "Colección {mark}",
+      "collection": "Colección {{mark}}",
       "addBookmark": "Añadir marcador",
       "noBookmarks": "No hay marcadores todavía",
       "addFirstBookmark": "Añade tu primer marcador",
       "loading": "Cargando marcadores...",
       "bookmarkletTip": "Arrastra este botón a la barra de marcadores para guardar páginas con un solo clic",
-      "saveButton": "Guardar en {mark}",
+      "saveButton": "Guardar en {{mark}}",
       "dragTip": "Arrastra a la barra de marcadores",
       "demoMode": "Modo demo",
       "demoDescription": "Esta es una colección de demostración. Puedes añadir, editar y eliminar marcadores libremente. Todos los cambios solo afectarán a tu vista local y no se guardarán en el servidor.",
@@ -132,7 +132,7 @@
       },
       "BookmarkDialog": {
         "addTitle": "Añadir marcador",
-        "addDescription": "Añade un nuevo marcador a la colección {mark}",
+        "addDescription": "Añade un nuevo marcador a la colección {{mark}}",
         "editTitle": "Editar marcador",
         "editDescription": "Editar información del marcador",
         "deleteTitle": "Eliminar marcador",
@@ -181,7 +181,7 @@
         "title": "Categorías",
         "expandNav": "Expandir navegación",
         "collapseNav": "Colapsar navegación",
-        "jumpToCategory": "Ir a {category}"
+        "jumpToCategory": "Ir a {{category}}"
       }
     },
     "Notifications": {
