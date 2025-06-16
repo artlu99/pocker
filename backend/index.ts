@@ -8,6 +8,9 @@ import {
 import type { NameApi } from "../shared/types";
 import type { BookmarkInstance, BookmarksData } from "../shared/types";
 
+const defaultMark = "default";
+const defaultCategory = "uncategorized";
+
 export default {
 	async fetch(request: Request, env: Env) {
 		const url = new URL(request.url);
@@ -157,6 +160,71 @@ export default {
 
 					default:
 						return new Response("Method not allowed", { status: 405 });
+				}
+			}
+		}
+
+		if (url.pathname.startsWith("/api/add")) {
+			if (request.method === "GET") {
+				const mark = url.searchParams.get("mark");
+				const title = url.searchParams.get("title") || "Untitled";
+				const urlParam = url.searchParams.get("url");
+
+				// Validate required parameters
+				if (!mark) {
+					return Response.redirect(
+						`/${defaultMark}?status=error&message=${encodeURIComponent("markRequired")}`,
+						302,
+					);
+				}
+				if (!urlParam) {
+					return Response.redirect(
+						`/${defaultMark}?status=error&message=${encodeURIComponent("urlRequired")}`,
+						302,
+					);
+				}
+
+				try {
+					// Get existing bookmarks
+					const bookmarksData = (await env.KV.get<BookmarksData>(
+						`bookmarks:${mark}`,
+						"json",
+					)) || {
+						mark,
+						bookmarks: [],
+					};
+
+					// Create new bookmark
+					const now = new Date().toISOString();
+					const bookmark: BookmarkInstance = {
+						uuid: crypto.randomUUID(),
+						url: urlParam,
+						title,
+						description: "",
+						category: defaultCategory,
+						createdAt: now,
+						modifiedAt: now,
+					};
+
+					// Validate the bookmark instance
+					bookmarkInstanceSchema.parse(bookmark);
+
+					// Add to bookmarks array
+					bookmarksData.bookmarks.push(bookmark);
+
+					// Save back to KV
+					await env.KV.put(`bookmarks:${mark}`, JSON.stringify(bookmarksData));
+
+					return Response.redirect(
+						`/${mark}?status=success&message=${encodeURIComponent("bookmarkAdded")}`,
+						302,
+					);
+				} catch (error) {
+					console.error("Error processing bookmark:", error);
+					return Response.redirect(
+						`/${defaultMark}?status=error&message=${encodeURIComponent("processingError")}`,
+						302,
+					);
 				}
 			}
 		}
