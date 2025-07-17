@@ -136,7 +136,7 @@
         "editTitle": "Editar marcador",
         "editDescription": "Editar información del marcador",
         "deleteTitle": "Eliminar marcador",
-        "deleteDescription": "¿Estás seguro de querer eliminar el marcador \"{title}\"?",
+        "deleteDescription": "¿Estás seguro de querer eliminar el marcador \"{{title}}\"?",
         "deleteConfirmation": "Esta acción no se puede deshacer. El marcador se eliminará permanentemente de tu colección.",
         "url": "URL",
         "urlPlaceholder": "Introduce la URL del marcador",

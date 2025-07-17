@@ -3,7 +3,10 @@
 	"name": "pocker",
 	"main": "backend/index.ts",
 	"compatibility_date": "2025-07-12",
-	"assets": { "not_found_handling": "single-page-application" },
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./dist/client"
+	},
 	"kv_namespaces": [
 		{
 			"binding": "KV",

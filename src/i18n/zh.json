@@ -139,7 +139,7 @@
         "editTitle": "编辑书签",
         "editDescription": "编辑书签信息",
         "deleteTitle": "删除书签",
-        "deleteDescription": "确定要删除书签 \"{title}\" 吗？",
+        "deleteDescription": "确定要删除书签 \"{{title}}\" 吗？",
         "deleteConfirmation": "此操作无法撤销，删除后书签将从您的收藏中永久移除。",
         "url": "网址",
         "urlPlaceholder": "输入书签网址",

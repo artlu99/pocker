@@ -139,7 +139,7 @@
         "editTitle": "Edit Bookmark",
         "editDescription": "Edit bookmark information",
         "deleteTitle": "Delete Bookmark",
-        "deleteDescription": "Are you sure you want to delete bookmark \"{title}\"?",
+        "deleteDescription": "Are you sure you want to delete bookmark \"{{title}}\"?",
         "deleteConfirmation": "This action cannot be undone. The bookmark will be permanently removed from your collection.",
         "url": "URL",
         "urlPlaceholder": "Enter bookmark URL",
