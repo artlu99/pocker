@@ -5,6 +5,7 @@ dist
 bun.lock
 
 # wrangler files
+worker-configuration.d.ts
 .wrangler
 .dev.vars*
 
