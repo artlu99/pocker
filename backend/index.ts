@@ -173,13 +173,13 @@ export default {
 				// Validate required parameters
 				if (!mark) {
 					return Response.redirect(
-						`/${defaultMark}?status=error&message=${encodeURIComponent("markRequired")}`,
+						new URL(`/${defaultMark}?status=error&message=${encodeURIComponent("markRequired")}`, request.url).toString(),
 						302,
 					);
 				}
 				if (!urlParam) {
 					return Response.redirect(
-						`/${defaultMark}?status=error&message=${encodeURIComponent("urlRequired")}`,
+						new URL(`/${defaultMark}?status=error&message=${encodeURIComponent("urlRequired")}`, request.url).toString(),
 						302,
 					);
 				}
@@ -216,13 +216,13 @@ export default {
 					await env.KV.put(`bookmarks:${mark}`, JSON.stringify(bookmarksData));
 
 					return Response.redirect(
-						`/${mark}?status=success&message=${encodeURIComponent("bookmarkAdded")}`,
+						new URL(`/${mark}?status=success&message=${encodeURIComponent("bookmarkAdded")}`, request.url).toString(),
 						302,
 					);
 				} catch (error) {
 					console.error("Error processing bookmark:", error);
 					return Response.redirect(
-						`/${defaultMark}?status=error&message=${encodeURIComponent("processingError")}`,
+						new URL(`/${defaultMark}?status=error&message=${encodeURIComponent("processingError")}`, request.url).toString(),
 						302,
 					);
 				}
