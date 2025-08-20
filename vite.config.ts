@@ -28,7 +28,7 @@ export default defineConfig({
 		}
 	})],
 	optimizeDeps: {
-		exclude: ["@sqlite.org/sqlite-wasm", "kysely", "@evolu/web"]
+		exclude: ["@evolu/web"]
 	},
 	resolve: {
 		alias: {

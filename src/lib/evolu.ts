@@ -2,7 +2,7 @@ import { SimpleName, createEvolu, getOrThrow } from "@evolu/common";
 import { NonEmptyString100, NonEmptyString1000, id, nullOr } from "@evolu/common";
 import { evoluReactWebDeps } from "@evolu/react-web";
 
-const EVOLU_INSTANCE = "pocker-3241038978";
+const EVOLU_INSTANCE = "pocker-3241038980";
 
 const AboutId = id("About");
 type AboutId = typeof AboutId.Type;
@@ -28,9 +28,6 @@ const Schema = {
 
 export const evoluInstance = createEvolu(evoluReactWebDeps)(Schema, {
 	name: getOrThrow(SimpleName.from(EVOLU_INSTANCE)),
-
-	// Disable sync for development to avoid WebSocket connection issues
-	// syncUrl: undefined, // optional, defaults to https://free.evoluhq.com
 
 	onInit: ({ isFirst }) => {
 		isFirst && evoluInstance.insert("about", { version: "1.0.0" });

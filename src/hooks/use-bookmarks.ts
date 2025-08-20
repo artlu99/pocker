@@ -118,11 +118,9 @@ export const useCreateBookmark = () => {
 		const now = new Date().toISOString();
 		
 		// Transform URL to Base64Url format (strip protocol)
-		// strip empty description for Evolu schema
 		const transformedBookmark = {
 			...bookmark,
 			url: stripUrlProtocol(bookmark.url),
-			description: bookmark.description === "" ? undefined : bookmark.description,
 		};
 		
 		if (isDemoMark(bookmark.mark)) {
@@ -134,7 +132,9 @@ export const useCreateBookmark = () => {
 				updatedAt: now,
 			};
 		}
-		const result = insert("bookmark", transformedBookmark);
+		// strip empty description for Evolu schema
+		const { description, ...bookmarkWithoutDescription } = transformedBookmark;
+		const result = insert("bookmark", description === "" ? bookmarkWithoutDescription : {...bookmarkWithoutDescription, description});
 		if (!result.ok) {
 			console.error(result.error);
 			throw new Error(`Unable to insert for ${bookmark.mark}`);

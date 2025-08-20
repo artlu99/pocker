@@ -34,8 +34,6 @@ Try the fork online: [getpocker.artlu.xyz](https://getpocker.artlu.xyz)
 ### Prerequisites
 
 - `bun`
-- *temporarily*: Cloudflare account
-- KV will become `Evolu`
 
 ### Install Dependencies
 
@@ -57,30 +55,6 @@ Visit [http://localhost:5173](http://localhost:5173) to see the result.
 bun run deploy
 ```
 
-## Cloudflare Configuration
-
-### KV Namespace
-
-*Temporarily,* Pocker uses Cloudflare KV to store bookmark data. You need to:
-
-1. Create a KV namespace in your Cloudflare Dashboard
-2. Update the `wrangler.jsonc` file:
-
-   ```json
-   "kv_namespaces": [
-      {
-        "binding": "KV",
-        "id": "your-kv-namespace-id"
-      }
-   ]
-   ```
-
-3. Re-run wrangler types
-
-```bash
-bun types
-```
-
 ## Technology Stack
 
 - [Vite 6](https://vite.dev) - The Build Tool for the Web
@@ -96,9 +70,9 @@ bun types
 
 - [x] Vite + Cloudflare Workers + Wouter replace Next.js
 - [x] React Query + `itty-fetcher` instead of `zsa` Next server actions
-- [ ] local-first rather than cloud-first
-- [ ] Evolu instead of Cloudflare KV
-- [ ] PWA to save to Home Screen and persist
+- [x] local-first rather than cloud-first
+- [x] Evolu instead of Cloudflare KV
+- [x] PWA to save to Home Screen and persist
 
 ## License
 
