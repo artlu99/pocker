@@ -1,9 +1,10 @@
 import { Link, Route, Switch } from "wouter";
 import "./app.css";
 import { Navigation } from "./components/Navigation";
+import { ApiAddHandler } from "./routes/ApiAddHandler";
+import { BookmarksPage } from "./routes/BookmarksPage";
 import { Doc } from "./routes/Doc";
 import { Landing } from "./routes/Landing";
-import { BookmarksPage } from "./routes/BookmarksPage";
 
 function App() {
 	return (
@@ -37,6 +38,7 @@ function App() {
 					<Switch>
 						<Route path="/" component={Landing} />
 						<Route path="/doc" component={Doc} />
+						<Route path="/api/add" component={ApiAddHandler} />
 						<Route path="/:mark" component={BookmarksPage} />
 						{/* Default route in a switch */}
 						<Route>404: No such page!</Route>
@@ -51,7 +53,21 @@ function App() {
 						Released under the AGPL License.
 					</p>
 					<p className="text-xs text-muted-foreground">
-						fork: Next.js → CF Worker, Cloudflare KV → Evolu
+						fork: <Link
+							href="https://github.com/wesleyel/cloudmark"
+							className="hover:text-primary"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Next.js/React + Cloudflare KV by Wesley Yang
+						</Link> → <Link
+							href="https://evolu.dev"
+							className="hover:text-primary"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							Evolu by steida
+						</Link>
 					</p>
 					<p className="text-xs text-muted-foreground">
 						Copyright © {new Date().getFullYear()}{" "}
@@ -62,15 +78,6 @@ function App() {
 							rel="noopener noreferrer"
 						>
 							artlu99
-						</Link>
-						,{" "}
-						<Link
-							href="https://github.com/wesleyel"
-							className="hover:text-primary"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							Wesley Yang 2025
 						</Link>
 					</p>
 				</div>

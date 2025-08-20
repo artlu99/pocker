@@ -2,7 +2,7 @@ import { Layers, Search } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "wouter";
-import type { BookmarkInstance, BookmarksData } from "../../shared/types";
+import type { BookmarkInstance, BookmarksData } from "../lib/types.ts";
 import { BookmarkCard } from "./bookmark-card.tsx";
 import { BookmarkletButton } from "./bookmarklet-button";
 import { DemoBanner } from "./demo-banner.tsx";
@@ -73,7 +73,7 @@ export const BookmarkUI = ({
 				setCurrentBookmarksData({
 					...currentBookmarksData,
 					bookmarks: currentBookmarksData.bookmarks.map((b) =>
-						b.uuid === bookmark.uuid ? bookmark : b,
+						b.id === bookmark.id ? bookmark : b,
 					),
 				});
 				refreshBookmarks();
@@ -83,13 +83,11 @@ export const BookmarkUI = ({
 	);
 
 	const onDeleteBookmark = useCallback(
-		(uuid: string) => {
+		(id: string) => {
 			if (currentBookmarksData) {
 				setCurrentBookmarksData({
 					...currentBookmarksData,
-					bookmarks: currentBookmarksData.bookmarks.filter(
-						(b) => b.uuid !== uuid,
-					),
+					bookmarks: currentBookmarksData.bookmarks.filter((b) => b.id !== id),
 				});
 				refreshBookmarks();
 			}
@@ -177,7 +175,7 @@ export const BookmarkUI = ({
 									<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 										{categoryBookmarks.map((bookmark, index) => (
 											<div
-												key={bookmark.uuid}
+												key={bookmark.id}
 												className={`h-full w-full delay-${(index % 9) * 100}`}
 											>
 												<BookmarkCard
@@ -186,7 +184,7 @@ export const BookmarkUI = ({
 													categories={categories}
 													onBookmarkUpdated={onUpdateBookmark}
 													onBookmarkDeleted={() =>
-														onDeleteBookmark(bookmark.uuid)
+														onDeleteBookmark(bookmark.id)
 													}
 												/>
 											</div>

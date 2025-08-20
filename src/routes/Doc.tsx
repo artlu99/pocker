@@ -80,11 +80,12 @@ export const Doc = () => {
 	};
 
 	// 处理复制URL
-	const handleCopyUrl = () => {
-		navigator.clipboard.writeText(`${baseUrl}/${mark}`);
-		setCopied(true);
-		setTimeout(() => setCopied(false), 2000);
-	};
+	// TODO: implement button
+	// const handleCopyUrl = () => {
+	// 	navigator.clipboard.writeText(`${baseUrl}/${mark}`);
+	// 	setCopied(true);
+	// 	setTimeout(() => setCopied(false), 2000);
+	// };
 
 	if (!mark) {
 		return (

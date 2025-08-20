@@ -7,14 +7,17 @@ import {
 	Pencil,
 	Plus,
 	Tag,
+	CheckCircle,
+	XCircle,
 } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { type UpdateSchema, updateSchema } from "../../shared/schema";
-import type { BookmarkInstance } from "../../shared/types";
 import { useUpdateBookmark } from "../hooks/use-bookmarks";
+import { type UpdateSchema, updateSchema } from "../lib/schema";
+import type { BookmarkInstance } from "../lib/types";
+import { addUrlProtocol } from "../lib/utils";
 import { Button } from "./ui/button";
 import {
 	Dialog,
@@ -44,6 +47,7 @@ import {
 	SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
+import { useToast } from "./toast-provider";
 
 interface DialogEditProps {
 	mark: string;
@@ -59,23 +63,37 @@ export function DialogEdit({
 	onBookmarkUpdated,
 }: DialogEditProps) {
 	const { t } = useTranslation();
+	const { showToast } = useToast();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
 	const [newCategory, setNewCategory] = useState("");
+	const [error, setError] = useState<string | null>(null);
 	const updateBookmark = useUpdateBookmark();
 
 	const form = useForm<UpdateSchema>({
 		resolver: zodResolver(updateSchema),
 		defaultValues: {
 			mark,
-			uuid: bookmark.uuid,
-			url: bookmark.url,
+			id: bookmark.id,
+			url: addUrlProtocol(bookmark.url), // Restore protocol for display
 			title: bookmark.title,
 			description: bookmark.description || "",
 			category: bookmark.category,
 		},
 	});
+
+	// Track form changes
+	const { formState: { isDirty } } = form;
+
+	// Reset error when dialog opens/closes
+	const handleOpenChange = (newOpen: boolean) => {
+		setOpen(newOpen);
+		if (!newOpen) {
+			setError(null);
+			setIsSubmitting(false);
+		}
+	};
 
 	const handleCategoryChange = (value: string) => {
 		if (value === "new_category") {
@@ -95,24 +113,50 @@ export function DialogEdit({
 
 	const onSubmit = async (data: UpdateSchema) => {
 		setIsSubmitting(true);
+		setError(null);
+		
 		try {
 			const categoryValue = isCreatingNewCategory ? newCategory : data.category;
-			const updatedBookmark = await updateBookmark.mutateAsync({
+			const updatedBookmark = updateBookmark({
 				...bookmark,
 				...data,
 				category: categoryValue,
 			});
+			
+			// Show success feedback
+			showToast({
+				title: t("Components.BookmarkDialog.updateSuccess"),
+				description: t("Components.BookmarkDialog.updateSuccessDescription"),
+				variant: "success",
+			});
+			
 			onBookmarkUpdated(updatedBookmark);
-			setOpen(false);
+			
+			// Close dialog after a brief delay to show success state
+			setTimeout(() => {
+				setOpen(false);
+			}, 500);
+			
 		} catch (error) {
 			console.error("Failed to update bookmark:", error);
+			const errorMessage = error instanceof Error 
+				? error.message 
+				: t("Components.BookmarkDialog.updateError");
+			setError(errorMessage);
+			
+			// Show error toast
+			showToast({
+				title: t("Components.BookmarkDialog.updateError"),
+				description: errorMessage,
+				variant: "error",
+			});
 		} finally {
 			setIsSubmitting(false);
 		}
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogTrigger asChild>
 				<Button
 					variant="outline"
@@ -135,6 +179,14 @@ export function DialogEdit({
 						{t("Components.BookmarkDialog.editDescription")}
 					</DialogDescription>
 				</DialogHeader>
+
+				{/* Error Display */}
+				{error && (
+					<div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-md text-red-600 dark:text-red-400">
+						<XCircle className="h-4 w-4 flex-shrink-0" />
+						<span className="text-sm">{error}</span>
+					</div>
+				)}
 
 				<Form {...form}>
 					<form
@@ -306,13 +358,20 @@ export function DialogEdit({
 							<div className="hover-scale-sm">
 								<Button
 									type="submit"
-									disabled={isSubmitting}
-									className="bg-linear-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+									disabled={isSubmitting || !isDirty}
+									className="bg-linear-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed"
 								>
-									{isSubmitting && (
-										<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+									{isSubmitting ? (
+										<>
+											<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+											{t("Components.BookmarkDialog.updating")}
+										</>
+									) : (
+										<>
+											<CheckCircle className="mr-2 h-4 w-4" />
+											{t("Components.BookmarkDialog.updateButton")}
+										</>
 									)}
-									{t("Components.BookmarkDialog.updateButton")}
 								</Button>
 							</div>
 						</DialogFooter>

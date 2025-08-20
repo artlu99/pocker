@@ -1,14 +1,10 @@
-export interface NameApi {
-    name: string;
-} 
-
 export interface BookmarkInstance {
-	uuid: string;
+	id: string;
 	url: string;
 	title: string;
 	favicon?: string;
 	createdAt: string;
-	modifiedAt: string;
+	updatedAt: string;
 	category: string;
 	description?: string;
 }

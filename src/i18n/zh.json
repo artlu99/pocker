@@ -159,15 +159,23 @@
         "backToCategories": "返回分类列表",
         "cancel": "取消",
         "reset": "重置",
+        "close": "关闭窗口",
         "addButton": "添加书签",
         "updateButton": "更新书签",
         "deleteButton": "删除书签",
         "adding": "添加中...",
         "updating": "更新中...",
         "deleting": "删除中...",
+        "redirecting": "3秒后重定向到您的书签...",
         "addSuccess": "书签添加成功",
+        "addSuccessDescription": "您的书签已成功添加",
+        "addError": "添加书签失败",
         "updateSuccess": "书签更新成功",
+        "updateSuccessDescription": "您的书签已成功更新",
+        "updateError": "更新书签失败",
         "deleteSuccess": "书签删除成功",
+        "deleteSuccessDescription": "您的书签已成功删除",
+        "deleteError": "删除书签失败",
         "errors": {
           "urlRequired": "请输入网址",
           "invalidUrl": "请输入有效的网址",
@@ -178,7 +186,8 @@
         },
         "addBookmark": "添加书签",
         "delete": "删除书签",
-        "edit": "编辑"
+        "edit": "编辑",
+        "viewBookmarks": "查看书签"
       },
       "FloatingNav": {
         "title": "分类导航",

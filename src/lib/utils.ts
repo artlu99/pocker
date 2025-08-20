@@ -1,9 +1,10 @@
-import { clsx, type ClassValue } from "clsx";
+import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { BookmarksData } from "../../shared/types";
+import type { BookmarksData } from "./types";
 
 export const defaultMark = "default";
-export const defaultCategory = "default";
+// TODO: CHECK THIS
+const defaultCategory = "uncategorized";
 export const isDemoMark = (mark: string) => mark === "demo";
 
 export function cn(...inputs: ClassValue[]) {
@@ -38,9 +39,8 @@ export const generateRandomMark = () => {
 		"bird",
 	];
 	const randomNum = Math.floor(Math.random() * 10000);
-	return `${adjectives[Math.floor(Math.random() * adjectives.length)]}-${
-		nouns[Math.floor(Math.random() * nouns.length)]
-	}-${randomNum}`;
+	return `${adjectives[Math.floor(Math.random() * adjectives.length)]}-${nouns[Math.floor(Math.random() * nouns.length)]
+		}-${randomNum}`;
 };
 
 export const getBaseUrl = () => {
@@ -74,3 +74,17 @@ export const getCategories = (bookmarksdata: BookmarksData | null) => {
 export const getDomain = (url: string) => {
 	return new URL(url).hostname.replace("www.", "");
 };
+
+// Remove protocol and any leading slashes
+export function stripUrlProtocol(url: string): string {	
+	return url.replace(/^https?:\/\//, '').replace(/^\/+/, '');
+}
+
+// Add https:// protocol to URL for display purposes
+// Assumes URLs without protocol should use https
+export function addUrlProtocol(url: string): string {
+	if (url.match(/^https?:\/\//)) {
+		return url; // Already has protocol
+	}
+	return `https://${url}`;
+}

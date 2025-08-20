@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight, Folder } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { BookmarkInstance, BookmarksData } from "../../shared/types";
+import type { BookmarkInstance, BookmarksData } from "../lib/types";
 import { cn } from "../lib/utils";
 
 interface FloatingNavProps {

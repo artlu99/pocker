@@ -1,19 +1,19 @@
-import type { BookmarkInstance } from "../../shared/types";
+import { formatDistanceToNow } from "date-fns";
+import { ExternalLink } from "lucide-react";
+import { memo } from "react";
+import { useTranslation } from "react-i18next";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
 import {
 	Card,
 	CardContent,
 	CardFooter,
 	CardHeader,
 } from "../components/ui/card";
-import { Button } from "../components/ui/button";
-import { Badge } from "../components/ui/badge";
-import { ExternalLink } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { useTranslation } from "react-i18next";
-import { memo } from "react";
-import { DialogEdit } from "./dialog-edit";
+import type { BookmarkInstance } from "../lib/types";
+import { getDomain, addUrlProtocol } from "../lib/utils";
 import { DialogDelete } from "./dialog-delete";
-import { getDomain } from "../lib/utils";
+import { DialogEdit } from "./dialog-edit";
 
 interface BookmarkCardProps {
 	bookmark: BookmarkInstance;
@@ -33,6 +33,9 @@ export const BookmarkCard = memo(function BookmarkCard({
 	const { t } = useTranslation();
 	const { url, title, favicon, createdAt, category, description } = bookmark;
 
+	// Restore URL protocol for display and navigation
+	const displayUrl = addUrlProtocol(url);
+
 	const formattedDate = (() => {
 		try {
 			return formatDistanceToNow(new Date(createdAt), {
@@ -44,7 +47,7 @@ export const BookmarkCard = memo(function BookmarkCard({
 		}
 	})();
 
-	const domain = getDomain(url);
+	const domain = getDomain(displayUrl);
 
 	return (
 		<>
@@ -76,7 +79,7 @@ export const BookmarkCard = memo(function BookmarkCard({
 						<h3 className="font-medium text-sm truncate" title={title}>
 							{title}
 						</h3>
-						<p className="text-xs text-muted-foreground truncate" title={url}>
+						<p className="text-xs text-muted-foreground truncate" title={displayUrl}>
 							{domain}
 						</p>
 					</div>
@@ -110,7 +113,7 @@ export const BookmarkCard = memo(function BookmarkCard({
 							variant="outline"
 							size="sm"
 							className="w-full border-blue-500/20 hover:border-blue-500/40 bg-blue-500/5 hover:bg-blue-500/10"
-							onClick={() => window.open(url, "_blank")}
+							onClick={() => window.open(displayUrl, "_blank")}
 						>
 							<ExternalLink className="h-3 w-3 mr-2" />
 							{t("Components.BookmarkCard.visit")}

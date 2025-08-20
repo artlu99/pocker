@@ -1,12 +1,21 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FileText, Link, Loader2, Plus, PlusCircle, Tag } from "lucide-react";
+import {
+	FileText,
+	Link,
+	Loader2,
+	Plus,
+	PlusCircle,
+	Tag,
+	CheckCircle,
+	XCircle,
+} from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { type InsertSchema, insertSchema } from "../../shared/schema";
-import type { BookmarkInstance } from "../../shared/types";
 import { useCreateBookmark } from "../hooks/use-bookmarks";
+import { type InsertSchema, insertSchema } from "../lib/schema";
+import type { BookmarkInstance, NonEmptyString100 } from "../lib/types";
 import { Button } from "./ui/button";
 import {
 	Dialog,
@@ -36,6 +45,7 @@ import {
 	SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
+import { useToast } from "./toast-provider";
 
 interface DialogCreateProps {
 	mark: string;
@@ -49,10 +59,12 @@ export function DialogAdd({
 	onBookmarkAdded,
 }: DialogCreateProps) {
 	const { t } = useTranslation();
+	const { showToast } = useToast();
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [open, setOpen] = useState(false);
 	const [isCreatingNewCategory, setIsCreatingNewCategory] = useState(false);
 	const [newCategory, setNewCategory] = useState("");
+	const [error, setError] = useState<string | null>(null);
 	const createBookmark = useCreateBookmark();
 
 	const form = useForm<InsertSchema>({
@@ -65,6 +77,16 @@ export function DialogAdd({
 			category: categories[0] || "",
 		},
 	});
+
+	// Reset error and form when dialog opens/closes
+	const handleOpenChange = (newOpen: boolean) => {
+		setOpen(newOpen);
+		if (!newOpen) {
+			setError(null);
+			setIsSubmitting(false);
+			form.reset();
+		}
+	};
 
 	const handleCategoryChange = (value: string) => {
 		if (value === "new_category") {
@@ -84,24 +106,51 @@ export function DialogAdd({
 
 	const onSubmit = async (data: InsertSchema) => {
 		setIsSubmitting(true);
+		setError(null);
+		
 		try {
 			const categoryValue = isCreatingNewCategory ? newCategory : data.category;
-			const bookmark = await createBookmark.mutateAsync({
+			const bookmark = createBookmark({
 				...data,
+				mark: data.mark as NonEmptyString100,
 				category: categoryValue,
 			});
+			
+			// Show success feedback
+			showToast({
+				title: t("Components.BookmarkDialog.addSuccess"),
+				description: t("Components.BookmarkDialog.addSuccessDescription"),
+				variant: "success",
+			});
+			
 			onBookmarkAdded(bookmark);
 			form.reset();
-			setOpen(false);
+			
+			// Close dialog after a brief delay to show success state
+			setTimeout(() => {
+				setOpen(false);
+			}, 500);
+			
 		} catch (error) {
 			console.error("Failed to create bookmark:", error);
+			const errorMessage = error instanceof Error 
+				? error.message 
+				: t("Components.BookmarkDialog.addError");
+			setError(errorMessage);
+			
+			// Show error toast
+			showToast({
+				title: t("Components.BookmarkDialog.addError"),
+				description: errorMessage,
+				variant: "error",
+			});
 		} finally {
 			setIsSubmitting(false);
 		}
 	};
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
+		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogTrigger asChild>
 				<Button
 					variant="outline"
@@ -123,6 +172,14 @@ export function DialogAdd({
 					</DialogDescription>
 				</DialogHeader>
 
+				{/* Error Display */}
+				{error && (
+					<div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-md text-red-600 dark:text-red-400">
+						<XCircle className="h-4 w-4 flex-shrink-0" />
+						<span className="text-sm">{error}</span>
+					</div>
+				)}
+
 				<Form {...form}>
 					<form
 						onSubmit={form.handleSubmit(onSubmit)}
@@ -139,12 +196,12 @@ export function DialogAdd({
 									</FormLabel>
 									<FormControl>
 										<Input
-											placeholder={t("urlPlaceholder")}
+											placeholder={t("Components.BookmarkDialog.urlPlaceholder")}
 											className="border-blue-500/20 focus:border-blue-500/40 bg-blue-500/5 focus:ring-blue-500/10"
 											{...field}
 										/>
 									</FormControl>
-									<FormDescription>{t("urlDescription")}</FormDescription>
+									<FormDescription>{t("Components.BookmarkDialog.urlDescription")}</FormDescription>
 									<FormMessage />
 								</FormItem>
 							)}
@@ -190,7 +247,7 @@ export function DialogAdd({
 											placeholder={t(
 												"Components.BookmarkDialog.descriptionPlaceholder",
 											)}
-											className="border-purple-500/20 focus:border-purple-500/40 bg-purple-500/5 focus:ring-purple-500/10 min-h-[80px]"
+											className="border-purple-500/20 focus:border-purple-500/40 bg-purple-500/5 focus:ring-purple-500/10"
 											{...field}
 										/>
 									</FormControl>
@@ -211,42 +268,67 @@ export function DialogAdd({
 										<Tag className="h-3.5 w-3.5 text-green-500" />
 										{t("Components.BookmarkDialog.category")}
 									</FormLabel>
-									<FormControl>
-										{isCreatingNewCategory ? (
-											<Input
-												placeholder={t(
-													"Components.BookmarkDialog.newCategoryPlaceholder",
-												)}
-												className="border-green-500/20 focus:border-green-500/40 bg-green-500/5 focus:ring-green-500/10"
-												value={newCategory}
-												onChange={handleNewCategoryChange}
-											/>
-										) : (
-											<Select
-												value={field.value}
-												onValueChange={handleCategoryChange}
+									{!isCreatingNewCategory ? (
+										<div className="space-y-2">
+											<div className="flex gap-2">
+												<Select
+													onValueChange={handleCategoryChange}
+													defaultValue={field.value}
+												>
+													<FormControl>
+														<SelectTrigger className="border-green-500/20 focus:border-green-500/40 bg-green-500/5 focus:ring-green-500/10">
+															<SelectValue
+																placeholder={t(
+																	"Components.BookmarkDialog.categoryPlaceholder",
+																)}
+															/>
+														</SelectTrigger>
+													</FormControl>
+													<SelectContent>
+														{categories.map((category) => (
+															<SelectItem key={category} value={category}>
+																{category}
+															</SelectItem>
+														))}
+													</SelectContent>
+												</Select>
+												<Button
+													type="button"
+													variant="outline"
+													size="icon"
+													onClick={() => setIsCreatingNewCategory(true)}
+													className="h-9 w-9 border-green-500/20 hover:bg-green-500/10"
+													title={t("Components.BookmarkDialog.newCategory")}
+												>
+													<Plus className="h-4 w-4 text-green-500" />
+												</Button>
+											</div>
+										</div>
+									) : (
+										<div className="flex gap-2">
+											<FormControl>
+												<Input
+													value={newCategory}
+													onChange={handleNewCategoryChange}
+													placeholder={t(
+														"Components.BookmarkDialog.newCategoryPlaceholder",
+													)}
+													className="border-green-500/20 focus:border-green-500/40 bg-green-500/5 focus:ring-green-500/10"
+													autoFocus
+												/>
+											</FormControl>
+											<Button
+												type="button"
+												variant="outline"
+												size="icon"
+												onClick={() => setIsCreatingNewCategory(false)}
+												className="h-9 w-9 border-green-500/20 hover:bg-green-500/10"
+												title={t("Components.BookmarkDialog.backToCategories")}
 											>
-												<SelectTrigger className="border-green-500/20 focus:border-green-500/40 bg-green-500/5 focus:ring-green-500/10">
-													<SelectValue
-														placeholder={t(
-															"Components.BookmarkDialog.categoryPlaceholder",
-														)}
-													/>
-												</SelectTrigger>
-												<SelectContent>
-													{categories.map((category) => (
-														<SelectItem key={category} value={category}>
-															{category}
-														</SelectItem>
-													))}
-													<SelectItem value="new_category">
-														<Plus className="h-3.5 w-3.5 mr-2" />
-														{t("Components.BookmarkDialog.newCategory")}
-													</SelectItem>
-												</SelectContent>
-											</Select>
-										)}
-									</FormControl>
+												<Tag className="h-4 w-4 text-green-500" />
+											</Button>
+										</div>
+									)}
 									<FormDescription>
 										{t("Components.BookmarkDialog.categoryDescription")}
 									</FormDescription>
@@ -255,33 +337,31 @@ export function DialogAdd({
 							)}
 						/>
 
-						<DialogFooter>
+						<DialogFooter className="gap-2 sm:gap-0">
 							<DialogClose asChild>
-								<Button
-									type="button"
-									variant="outline"
-									className="border-red-500/20 hover:border-red-500/40 bg-red-500/5 hover:bg-red-500/10"
-								>
+								<Button type="button" variant="outline">
 									{t("Components.BookmarkDialog.cancel")}
 								</Button>
 							</DialogClose>
-							<Button
-								type="submit"
-								disabled={isSubmitting}
-								className="bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
-							>
-								{isSubmitting ? (
-									<>
-										<Loader2 className="h-3.5 w-3.5 mr-2 animate-spin" />
-										{t("Components.BookmarkDialog.adding")}
-									</>
-								) : (
-									<>
-										<Plus className="h-3.5 w-3.5 mr-2" />
-										{t("Components.BookmarkDialog.addButton")}
-									</>
-								)}
-							</Button>
+							<div className="hover-scale-sm">
+								<Button
+									type="submit"
+									disabled={isSubmitting}
+									className="bg-linear-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600"
+								>
+									{isSubmitting ? (
+										<>
+											<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+											{t("Components.BookmarkDialog.adding")}
+										</>
+									) : (
+										<>
+											<CheckCircle className="mr-2 h-4 w-4" />
+											{t("Components.BookmarkDialog.addButton")}
+										</>
+									)}
+								</Button>
+							</div>
 						</DialogFooter>
 					</form>
 				</Form>

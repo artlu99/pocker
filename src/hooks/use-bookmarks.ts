@@ -1,226 +1,187 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-	createBookmark,
-	deleteBookmark,
-	fetchBookmarks,
-	updateBookmark,
-} from "../api/bookmarks";
+import type { NonEmptyString100 } from "@evolu/common";
+import { useEvolu, useQuery } from "@evolu/react";
+import { retry } from "radash";
+import { useEffect } from "react";
 import { DEMO_BOOKMARKS_DATA } from "../lib/demo_data";
-import { isDemoMark } from "../lib/utils";
-import type { BookmarkInstance, BookmarksData } from "../../shared/types";
+import { evoluInstance } from "../lib/evolu";
+import type { BookmarkInstance, BookmarksData } from "../lib/types";
+import { isDemoMark, stripUrlProtocol } from "../lib/utils";
+import { useZustand } from "./use-zustand";
 
-const bookmarksQueryKey = "bookmarks";
+export const useInstantiateDb = () => {
+	const { isEvoluReady, setIsEvoluReady } = useZustand();
 
-export const useBookmarks = (mark: string) => {
-	return useQuery({
-		queryKey: [bookmarksQueryKey, mark],
-		queryFn: () =>
-			isDemoMark(mark) ? DEMO_BOOKMARKS_DATA : fetchBookmarks(mark),
-	});
+	const isUpToDate = evoluInstance.createQuery((db) =>
+		db
+			.selectFrom("about")
+			.select(["version"])
+			.orderBy("version", "desc")
+			.limit(1),
+	);
+
+	// exponential backoff to wait for Evolu instance initialization
+	useEffect(() => {
+		const checkInitialization = async () => {
+			try {
+				await retry(
+					{ delay: 100, backoff: (count) => 2 ** count * 100, times: 4 },
+					async () => {
+						// Check if we have data or if the database is still initializing
+						if (isUpToDate?.length > 0) {
+							return true; // Success - we have data
+						}
+
+						// If we still have no data after multiple retries, assume initialization is complete
+						// and the database is genuinely empty
+						throw new Error("Still initializing");
+					},
+				);
+
+				// If we get here, we have data or initialization is complete
+				setIsEvoluReady(true);
+			} catch (error) {
+				// After all retries, assume initialization is complete
+				console.log("Initialization check complete, database ready");
+				setIsEvoluReady(true);
+			}
+		};
+
+		!isEvoluReady && checkInitialization();
+	}, [isUpToDate, isEvoluReady, setIsEvoluReady]);
+
+	// Only return the result when we're ready
+	return isEvoluReady ? { isUpToDate } : null;
+};
+
+export const fetchBookmarks = (
+	mark: NonEmptyString100,
+): BookmarksData | null => {
+	if (isDemoMark(mark)) {
+		return DEMO_BOOKMARKS_DATA;
+	}
+
+	const bookmarksQuery = evoluInstance.createQuery((db) =>
+		db
+			.selectFrom("bookmark")
+			.select([
+				"id",
+				"mark",
+				"url",
+				"title",
+				"favicon",
+				"description",
+				"category",
+				"createdAt",
+				"updatedAt",
+			])
+			.where("isDeleted", "is", null)
+			.where("mark", "is", mark)
+			.orderBy("updatedAt", "desc")
+			.limit(100),
+	);
+	const rows = useQuery(bookmarksQuery);
+	return rows
+		? {
+			mark,
+			bookmarks: rows.map((row) => {
+				const {
+					id,
+					url,
+					title,
+					favicon,
+					description,
+					category,
+					createdAt,
+					updatedAt,
+				} = row;
+				return {
+					id,
+					url: url ?? "<missing url>",
+					title: title ?? "<missing title>",
+					favicon: favicon ?? undefined,
+					description: description ?? undefined,
+					category: category ?? "<no category>",
+					createdAt,
+					updatedAt,
+				};
+			}),
+		}
+		: null;
 };
 
 export const useCreateBookmark = () => {
-	const queryClient = useQueryClient();
+	const { insert } = useEvolu();
 
-	return useMutation({
-		mutationFn: async (
-			newBookmark: Omit<
-				BookmarkInstance,
-				"uuid" | "createdAt" | "modifiedAt"
-			> & { mark: string },
-		) => {
-			if (isDemoMark(newBookmark.mark)) {
-				// Add timestamps and UUID for demo mode
-				const now = new Date().toISOString();
-				return {
-					...newBookmark,
-					uuid: crypto.randomUUID(),
-					createdAt: now,
-					modifiedAt: now,
-				};
-			}
-			return createBookmark(newBookmark);
-		},
-		onMutate: async (newBookmark) => {
-			// Cancel any outgoing refetches
-			await queryClient.cancelQueries({
-				queryKey: [bookmarksQueryKey, newBookmark.mark],
-			});
-
-			// Snapshot the previous value
-			const previousBookmarks = queryClient.getQueryData<BookmarksData>([
-				bookmarksQueryKey,
-				newBookmark.mark,
-			]);
-
-			// Create a complete bookmark with timestamps for demo mode
-			const now = new Date().toISOString();
-			const completeBookmark = isDemoMark(newBookmark.mark)
-				? {
-						...newBookmark,
-						uuid: crypto.randomUUID(),
-						createdAt: now,
-						modifiedAt: now,
-					}
-				: newBookmark;
-
-			// Optimistically update to the new value
-			queryClient.setQueryData(
-				[bookmarksQueryKey, newBookmark.mark],
-				(old: BookmarksData | undefined) => {
-					if (!old) return old;
-					return {
-						...old,
-						bookmarks: [...old.bookmarks, completeBookmark],
-					};
-				},
-			);
-
-			return { previousBookmarks };
-		},
-		onError: (_, __, context) => {
-			// If the mutation fails, use the context returned from onMutate to roll back
-			if (context?.previousBookmarks) {
-				queryClient.setQueryData(
-					[bookmarksQueryKey, context.previousBookmarks.mark],
-					context.previousBookmarks,
-				);
-			}
-		},
-		onSettled: (_, __, variables) => {
-			// Only refetch if not in demo mode
-			if (!isDemoMark(variables.mark)) {
-				queryClient.invalidateQueries({
-					queryKey: [bookmarksQueryKey, variables.mark],
-				});
-			}
-		},
-	});
+	return (bookmark: Omit<BookmarkInstance, "id" | "createdAt" | "updatedAt"> & {
+		mark: NonEmptyString100;
+	}): BookmarkInstance => {
+		const now = new Date().toISOString();
+		
+		// Transform URL to Base64Url format (strip protocol)
+		// strip empty description for Evolu schema
+		const transformedBookmark = {
+			...bookmark,
+			url: stripUrlProtocol(bookmark.url),
+			description: bookmark.description === "" ? undefined : bookmark.description,
+		};
+		
+		if (isDemoMark(bookmark.mark)) {
+			// Add timestamp, UUID for demo mode
+			return {
+				...transformedBookmark,
+				id: crypto.randomUUID(),
+				createdAt: now,
+				updatedAt: now,
+			};
+		}
+		const result = insert("bookmark", transformedBookmark);
+		if (!result.ok) {
+			console.error(result.error);
+			throw new Error(`Unable to insert for ${bookmark.mark}`);
+		}
+		return {
+			...bookmark,
+			id: result.value as unknown as string,
+			createdAt: now,
+			updatedAt: now,
+		};
+	};
 };
 
 export const useUpdateBookmark = () => {
-	const queryClient = useQueryClient();
+	const { update } = useEvolu();
 
-	return useMutation({
-		mutationFn: async (
-			updatedBookmark: BookmarkInstance & { mark: string },
-		) => {
-			if (isDemoMark(updatedBookmark.mark)) {
-				return {
-					...updatedBookmark,
-					modifiedAt: new Date().toISOString(),
-				};
-			}
-			return updateBookmark(updatedBookmark);
-		},
-		onMutate: async (updatedBookmark) => {
-			// Cancel any outgoing refetches
-			await queryClient.cancelQueries({
-				queryKey: [bookmarksQueryKey, updatedBookmark.mark],
-			});
-
-			// Snapshot the previous value
-			const previousBookmarks = queryClient.getQueryData<BookmarksData>([
-				bookmarksQueryKey,
-				updatedBookmark.mark,
-			]);
-
-			// Update the modifiedAt timestamp for demo mode
-			const completeBookmark = isDemoMark(updatedBookmark.mark)
-				? {
-						...updatedBookmark,
-						modifiedAt: new Date().toISOString(),
-					}
-				: updatedBookmark;
-
-			// Optimistically update to the new value
-			queryClient.setQueryData(
-				[bookmarksQueryKey, updatedBookmark.mark],
-				(old: BookmarksData | undefined) => {
-					if (!old) return old;
-					return {
-						...old,
-						bookmarks: old.bookmarks.map((b: BookmarkInstance) =>
-							b.uuid === updatedBookmark.uuid ? completeBookmark : b,
-						),
-					};
-				},
-			);
-
-			return { previousBookmarks };
-		},
-		onError: (_, __, context) => {
-			// If the mutation fails, use the context returned from onMutate to roll back
-			if (context?.previousBookmarks) {
-				queryClient.setQueryData(
-					[bookmarksQueryKey, context.previousBookmarks.mark],
-					context.previousBookmarks,
-				);
-			}
-		},
-		onSettled: (_, __, variables) => {
-			// Only refetch if not in demo mode
-			if (!isDemoMark(variables.mark)) {
-				queryClient.invalidateQueries({
-					queryKey: [bookmarksQueryKey, variables.mark],
-				});
-			}
-		},
-	});
+	return (bookmark: BookmarkInstance & { mark: string }): BookmarkInstance => {
+		// Transform URL to Base64Url format (strip protocol)
+		const transformedBookmark = {
+			...bookmark,
+			url: stripUrlProtocol(bookmark.url),
+		};
+		
+		if (isDemoMark(bookmark.mark)) {
+			return {
+				...transformedBookmark,
+				updatedAt: new Date().toISOString(),
+			};
+		}
+		const { createdAt, updatedAt, favicon, description, ...bookmarkWithoutTimestamps } = transformedBookmark;
+		const res = update("bookmark", description === "" ? { ...bookmarkWithoutTimestamps } : {...bookmarkWithoutTimestamps, description});
+		// TODO: handle error in optimistic UI
+		if (!res.ok) {
+			console.error(res.error);
+			throw new Error(`Unable to to update ${bookmark.mark}: ${bookmark.id}`);
+		}
+		return bookmark;
+	};
 };
 
 export const useDeleteBookmark = () => {
-	const queryClient = useQueryClient();
+	const { update } = useEvolu();
 
-	return useMutation({
-		mutationFn: async ({ mark, uuid }: { mark: string; uuid: string }) => {
-			if (isDemoMark(mark)) {
-				return { mark, uuid }; // Skip server update for demo mode
-			}
-			return deleteBookmark({ mark, uuid });
-		},
-		onMutate: async ({ mark, uuid }) => {
-			// Cancel any outgoing refetches
-			await queryClient.cancelQueries({
-				queryKey: [bookmarksQueryKey, mark],
-			});
-
-			// Snapshot the previous value
-			const previousBookmarks = queryClient.getQueryData<BookmarksData>([
-				bookmarksQueryKey,
-				mark,
-			]);
-
-			// Optimistically update to the new value
-			queryClient.setQueryData(
-				[bookmarksQueryKey, mark],
-				(old: BookmarksData | undefined) => {
-					if (!old) return old;
-					return {
-						...old,
-						bookmarks: old.bookmarks.filter((b) => b.uuid !== uuid),
-					};
-				},
-			);
-
-			return { previousBookmarks };
-		},
-		onError: (_, __, context) => {
-			// If the mutation fails, use the context returned from onMutate to roll back
-			if (context?.previousBookmarks) {
-				queryClient.setQueryData(
-					[bookmarksQueryKey, context.previousBookmarks.mark],
-					context.previousBookmarks,
-				);
-			}
-		},
-		onSettled: (_, __, variables) => {
-			// Only refetch if not in demo mode
-			if (!isDemoMark(variables.mark)) {
-				queryClient.invalidateQueries({
-					queryKey: [bookmarksQueryKey, variables.mark],
-				});
-			}
-		},
-	});
+	return ({ mark, id }: { mark: string; id: string }): void => {
+		if (isDemoMark(mark)) {
+			return; // Skip server update for demo mode
+		}
+		update("bookmark", { id, isDeleted: true });
+	};
 };

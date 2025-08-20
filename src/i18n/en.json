@@ -159,15 +159,23 @@
         "backToCategories": "Back to categories",
         "cancel": "Cancel",
         "reset": "Reset",
+        "close": "Close Window",
         "addButton": "Add Bookmark",
         "updateButton": "Update Bookmark",
         "deleteButton": "Delete Bookmark",
         "adding": "Adding...",
         "updating": "Updating...",
         "deleting": "Deleting...",
+        "redirecting": "Redirecting to your bookmarks in 3 seconds...",
         "addSuccess": "Bookmark added successfully",
+        "addSuccessDescription": "Your bookmark has been added successfully",
+        "addError": "Failed to add bookmark",
         "updateSuccess": "Bookmark updated successfully",
+        "updateSuccessDescription": "Your bookmark has been updated successfully",
+        "updateError": "Failed to update bookmark",
         "deleteSuccess": "Bookmark deleted successfully",
+        "deleteSuccessDescription": "Your bookmark has been deleted successfully",
+        "deleteError": "Failed to delete bookmark",
         "errors": {
           "urlRequired": "URL is required",
           "invalidUrl": "Please enter a valid URL",
@@ -178,7 +186,8 @@
         },
         "addBookmark": "Add Bookmark",
         "delete": "Delete bookmark",
-        "edit": "Edit bookmark"
+        "edit": "Edit bookmark",
+        "viewBookmarks": "View Bookmarks"
       },
       "FloatingNav": {
         "title": "Categories",

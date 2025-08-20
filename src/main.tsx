@@ -1,3 +1,4 @@
+import { EvoluProvider } from "@evolu/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -10,6 +11,7 @@ import en from "./i18n/en.json";
 import es from "./i18n/es.json";
 import zh from "./i18n/zh.json";
 import "./index.css";
+import { evoluInstance } from "./lib/evolu";
 
 const resources = {
 	en: { translation: en },
@@ -41,10 +43,12 @@ if (!root) throw new Error("root not found");
 
 createRoot(root).render(
 	<StrictMode>
-		<QueryClientProvider client={queryClient}>
-			<ToastProvider>
-				<App />
-			</ToastProvider>
-		</QueryClientProvider>
+		<EvoluProvider value={evoluInstance}>
+			<QueryClientProvider client={queryClient}>
+				<ToastProvider>
+					<App />
+				</ToastProvider>
+			</QueryClientProvider>
+		</EvoluProvider>
 	</StrictMode>,
 );

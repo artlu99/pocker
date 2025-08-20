@@ -156,15 +156,23 @@
         "backToCategories": "Volver a categorías",
         "cancel": "Cancelar",
         "reset": "Restablecer",
+        "close": "Cerrar ventana",
         "addButton": "Añadir marcador",
         "updateButton": "Actualizar marcador",
         "deleteButton": "Eliminar marcador",
         "adding": "Añadiendo...",
         "updating": "Actualizando...",
         "deleting": "Eliminando...",
+        "redirecting": "Redirigiendo a tus marcadores en 3 segundos...",
         "addSuccess": "Marcador añadido correctamente",
+        "addSuccessDescription": "Tu marcador ha sido añadido correctamente",
+        "addError": "Error al añadir marcador",
         "updateSuccess": "Marcador actualizado correctamente",
+        "updateSuccessDescription": "Tu marcador ha sido actualizado correctamente",
+        "updateError": "Error al actualizar marcador",
         "deleteSuccess": "Marcador eliminado correctamente",
+        "deleteSuccessDescription": "Tu marcador ha sido eliminado correctamente",
+        "deleteError": "Error al eliminar marcador",
         "errors": {
           "urlRequired": "URL requerida",
           "invalidUrl": "Por favor, introduce una URL válida",
@@ -175,7 +183,8 @@
         },
         "addBookmark": "Añadir marcador",
         "delete": "Eliminar marcador",
-        "edit": "Editar marcador"
+        "edit": "Editar marcador",
+        "viewBookmarks": "Ver marcadores"
       },
       "FloatingNav": {
         "title": "Categorías",
