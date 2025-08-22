@@ -53,32 +53,32 @@ function App() {
 						Released under the AGPL License.
 					</p>
 					<p className="text-xs text-muted-foreground">
-						fork: <Link
+						fork: <a
 							href="https://github.com/wesleyel/cloudmark"
 							className="hover:text-primary"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
 							Next.js/React + Cloudflare KV by Wesley Yang
-						</Link> → <Link
+						</a> → <a
 							href="https://evolu.dev"
 							className="hover:text-primary"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
 							Evolu by steida
-						</Link>
+						</a>
 					</p>
 					<p className="text-xs text-muted-foreground">
 						Copyright © {new Date().getFullYear()}{" "}
-						<Link
+						<a
 							href="https://github.com/artlu99"
 							className="hover:text-primary"
 							target="_blank"
 							rel="noopener noreferrer"
 						>
 							artlu99
-						</Link>
+						</a>
 					</p>
 				</div>
 			</footer>
