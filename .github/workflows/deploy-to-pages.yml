@@ -26,12 +26,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22' # Updated to Node 22 LTS
-          cache: 'bun'
+          # Remove the cache option since bun caching isn't supported
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
+          cache: true  # This enables Bun's built-in caching
 
       - name: Install dependencies
         run: bun install
