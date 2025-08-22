@@ -71,7 +71,6 @@ bun run deploy
 - [x] no `zsa` Next server actions
 - [x] local-first rather than cloud-first
 - [x] Evolu instead of Cloudflare KV
-- [x] PWA to save to Home Screen and persist
 
 ## License
 
