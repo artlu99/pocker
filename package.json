@@ -13,6 +13,7 @@
 		"@evolu/react": "^9.0.1-preview.4",
 		"@evolu/react-web": "^1.0.1-preview.3",
 		"@hookform/resolvers": "^5.2.1",
+		"@icons-pack/react-simple-icons": "^13.7.0",
 		"@radix-ui/react-dialog": "^1.1.15",
 		"@radix-ui/react-dropdown-menu": "^2.1.16",
 		"@radix-ui/react-label": "^2.1.7",

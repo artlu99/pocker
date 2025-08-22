@@ -1,5 +1,6 @@
-import { FileText, Github } from "lucide-react";
+import { FileText } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 import { Link } from "wouter";
 import { LanguageSwitcher } from "./language-switcher";
 import { Button } from "./ui/button";
@@ -23,7 +24,7 @@ export function Navigation() {
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					<Github className="h-4 w-4" />
+					<SiGithub className="h-4 w-4" />
 					<span className="hidden sm:inline">{t("Navigation.github")}</span>
 				</a>
 			</Button>
