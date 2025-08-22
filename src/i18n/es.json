@@ -191,6 +191,11 @@
         "expandNav": "Expandir navegación",
         "collapseNav": "Colapsar navegación",
         "jumpToCategory": "Ir a {{category}}"
+      },
+      "Export": {
+        "html": "Exportar como HTML",
+        "error": "Error de exportación",
+        "noBookmarks": "No hay marcadores para exportar"
       }
     },
     "Notifications": {

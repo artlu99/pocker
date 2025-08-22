@@ -194,6 +194,11 @@
         "expandNav": "展开导航",
         "collapseNav": "折叠导航",
         "jumpToCategory": "跳转到{{category}}分类"
+      },
+      "Export": {
+        "html": "导出为 HTML",
+        "error": "导出错误",
+        "noBookmarks": "没有可导出的书签"
       }
     },
     "Notifications": {

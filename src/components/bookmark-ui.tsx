@@ -7,6 +7,7 @@ import { BookmarkCard } from "./bookmark-card.tsx";
 import { BookmarkletButton } from "./bookmarklet-button";
 import { DemoBanner } from "./demo-banner.tsx";
 import { DialogAdd } from "./dialog-add.tsx";
+import { ExportButton } from "./export-button.tsx";
 import { FloatingNav } from "./floating-nav.tsx";
 import { useToast } from "./toast-provider";
 
@@ -121,9 +122,15 @@ export const BookmarkUI = ({
 								{t("BookmarksPage.title")}
 							</h1>
 						</div>
-						<p className="subtitle-text text-muted-foreground">
-							{t("BookmarksPage.collection", { mark })}
-						</p>
+
+						<div className="flex items-center gap-2">
+							<ExportButton bookmarksData={bookmarksData} mark={mark} />
+
+							<p className="subtitle-text text-muted-foreground">
+								{t("BookmarksPage.collection", { mark })}
+							</p>
+						</div>
+
 					</div>
 
 					<div className="flex flex-col sm:flex-row gap-3">
