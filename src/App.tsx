@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link, Route, Switch } from "wouter";
 import "./app.css";
 import { Navigation } from "./components/Navigation";
@@ -7,6 +8,8 @@ import { Doc } from "./routes/Doc";
 import { Landing } from "./routes/Landing";
 
 function App() {
+	const { t } = useTranslation();
+
 	return (
 		<div className="min-h-screen flex flex-col relative overflow-hidden bg-[radial-gradient(ellipse_at_top_right,rgba(147,51,234,0.15),transparent_70%),radial-gradient(ellipse_at_right,rgba(59,130,246,0.15),transparent_70%)]">
 			{/* Header */}
@@ -18,13 +21,13 @@ function App() {
 					>
 						<img
 							src="/icon1.svg"
-							alt="Pocker logo"
+							alt={t("HomePage.Logo.altText")}
 							width={24}
 							height={24}
 							className="h-6 w-6 text-primary"
 						/>
 						<span className="font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-500 to-purple-500">
-							Pocker
+							{t("HomePage.project")}
 						</span>
 					</Link>
 

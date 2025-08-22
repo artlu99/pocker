@@ -1,5 +1,6 @@
 {
     "HomePage": {
+      "project": "Pocker",
       "quickstart": "Quick Start",
       "title": "Universal Bookmark Manager",
       "description": "Save and organize your bookmarks with one click. Access them anywhere, anytime.",
@@ -188,6 +189,9 @@
         "delete": "Delete bookmark",
         "edit": "Edit bookmark",
         "viewBookmarks": "View Bookmarks"
+      },
+      "Logo": {
+        "altText": "Pocker Logo"
       },
       "FloatingNav": {
         "title": "Categories",

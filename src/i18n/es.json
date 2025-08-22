@@ -1,5 +1,6 @@
 {
     "HomePage": {
+      "project": "Pocker",
       "quickstart": "Empieza rápido",
       "title": "Administrador de Marcadores Universal",
       "description": "Guarda y organiza tus marcadores con un solo clic. Accede a ellos en cualquier momento y dispositivo.",
@@ -185,6 +186,9 @@
         "delete": "Eliminar marcador",
         "edit": "Editar marcador",
         "viewBookmarks": "Ver marcadores"
+      },
+      "Logo": {
+        "altText": "Logo de Pocker"
       },
       "FloatingNav": {
         "title": "Categorías",

@@ -1,5 +1,6 @@
 {
     "HomePage": {
+      "project": "Pocker",
       "quickstart": "快速入门",
       "title": "通用书签管理器",
       "description": "一键保存和整理书签。随时随地访问。",
@@ -188,6 +189,9 @@
         "delete": "删除书签",
         "edit": "编辑",
         "viewBookmarks": "查看书签"
+      },
+      "Logo": {
+        "altText": "Pocker 图标"
       },
       "FloatingNav": {
         "title": "分类导航",

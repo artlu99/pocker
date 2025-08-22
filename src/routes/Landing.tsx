@@ -23,7 +23,7 @@ export const Landing = () => {
 				{/* Logo 和主标题 */}
 				<div className="relative mb-3 animate-scaleIn">
 					<h1 className="text-4xl font-bold bg-clip-text text-transparent bg-linear-to-r from-blue-500 via-indigo-500 to-purple-500">
-						Pocker
+						{t("HomePage.project")}
 					</h1>
 					<div className="absolute -inset-1 bg-blue-500/20 rounded-full blur-xl -z-10" />
 				</div>
@@ -49,7 +49,6 @@ export const Landing = () => {
 							className="transition-transform hover:scale-105"
 						/>
 					</a>
-					<br />
 					<a
 						href="https://github.com/artlu99/pocker"
 						target="_blank"
