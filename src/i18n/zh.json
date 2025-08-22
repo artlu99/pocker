@@ -1,6 +1,6 @@
 {
     "HomePage": {
-      "project": "Pocker",
+      "project": "LocalMark",
       "quickstart": "快速入门",
       "title": "通用书签管理器",
       "description": "一键保存和整理书签。随时随地访问。",
@@ -29,12 +29,12 @@
       "description": "无法找到此页面。"
     },
     "DocPage": {
-      "title": "Pocker 快速入门",
+      "title": "LocalMark 快速入门",
       "description": "跨设备、跨浏览器的本地优先书签管理工具",
       "loading": "加载中...",
       "intro": {
-        "title": "什么是 Pocker",
-        "description": "Pocker 是一个本地优先的书签收集工具，允许您一键保存和组织网页书签，并从任何设备访问。",
+        "title": "什么是 LocalMark",
+        "description": "LocalMark 是一个本地优先的书签收集工具，允许您一键保存和组织网页书签，并从任何设备访问。",
         "features": {
           "title": "主要特点",
           "oneClick": "一键保存当前浏览页面",
@@ -66,7 +66,7 @@
         }
       },
       "usage": {
-        "title": "如何使用 Pocker",
+        "title": "如何使用 LocalMark",
         "steps": {
           "setup": {
             "title": "设置您的 Bookmarklet",
@@ -74,7 +74,7 @@
           },
           "save": {
             "title": "保存网页到您的集合",
-            "description": "当您浏览网页时，点击书签栏中的 Pocker bookmarklet，会打开添加书签的页面。填写分类和描述（可选），然后保存即可。"
+            "description": "当您浏览网页时，点击书签栏中的 LocalMark bookmarklet，会打开添加书签的页面。填写分类和描述（可选），然后保存即可。"
           },
           "access": {
             "title": "访问您的书签集合",
@@ -87,8 +87,8 @@
         }
       },
       "demo": {
-        "title": "想要体验 Pocker？",
-        "description": "不需要创建书签集合，直接体验 Pocker 的全部功能",
+        "title": "想要体验 LocalMark？",
+        "description": "不需要创建书签集合，直接体验 LocalMark 的全部功能",
         "button": "查看演示"
       },
       "navigation": {
@@ -191,7 +191,7 @@
         "viewBookmarks": "查看书签"
       },
       "Logo": {
-        "altText": "Pocker 图标"
+        "altText": "LocalMark 图标"
       },
       "FloatingNav": {
         "title": "分类导航",

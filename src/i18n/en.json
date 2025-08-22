@@ -1,6 +1,6 @@
 {
     "HomePage": {
-      "project": "Pocker",
+      "project": "LocalMark",
       "quickstart": "Quick Start",
       "title": "Universal Bookmark Manager",
       "description": "Save and organize your bookmarks with one click. Access them anywhere, anytime.",
@@ -29,12 +29,12 @@
       "description": "This page could not be found."
     },
     "DocPage": {
-      "title": "Pocker Quick Start",
+      "title": "LocalMark Quick Start",
       "description": "Cross-device, cross-browser local-first bookmarks management tool",
       "loading": "Loading...",
       "intro": {
-        "title": "What is Pocker?",
-        "description": "Pocker is a local-first bookmark collection tool that allows you to save and organize web bookmarks with one click and access them from any device.",
+        "title": "What is LocalMark?",
+        "description": "LocalMark is a local-first bookmark collection tool that allows you to save and organize web bookmarks with one click and access them from any device.",
         "features": {
           "title": "Key Features",
           "oneClick": "One-click saving of current webpage",
@@ -66,7 +66,7 @@
         }
       },
       "usage": {
-        "title": "How to Use Pocker",
+        "title": "How to Use LocalMark",
         "steps": {
           "setup": {
             "title": "Set Up Your Bookmarklet",
@@ -74,7 +74,7 @@
           },
           "save": {
             "title": "Save Webpages to Your Collection",
-            "description": "When browsing a webpage, click the Pocker bookmarklet in your bookmark bar to open the bookmark addition page. Fill in the category and description (optional), then save."
+            "description": "When browsing a webpage, click the LocalMark bookmarklet in your bookmark bar to open the bookmark addition page. Fill in the category and description (optional), then save."
           },
           "access": {
             "title": "Access Your Bookmark Collection",
@@ -87,8 +87,8 @@
         }
       },
       "demo": {
-        "title": "Want to Experience Pocker?",
-        "description": "Try all the features of Pocker without creating a bookmark collection",
+        "title": "Want to Experience LocalMark?",
+        "description": "Try all the features of LocalMark without creating a bookmark collection",
         "button": "View Demo"
       },
       "navigation": {
@@ -191,7 +191,7 @@
         "viewBookmarks": "View Bookmarks"
       },
       "Logo": {
-        "altText": "Pocker Logo"
+        "altText": "LocalMark Logo"
       },
       "FloatingNav": {
         "title": "Categories",

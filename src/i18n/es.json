@@ -1,6 +1,6 @@
 {
     "HomePage": {
-      "project": "Pocker",
+      "project": "LocalMark",
       "quickstart": "Empieza rápido",
       "title": "Administrador de Marcadores Universal",
       "description": "Guarda y organiza tus marcadores con un solo clic. Accede a ellos en cualquier momento y dispositivo.",
@@ -29,12 +29,12 @@
       "description": "Esta página no se encontró."
     },
     "DocPage": {
-      "title": "Pocker Empieza Rápido",
+      "title": "LocalMark Empieza Rápido",
       "description": "Herramienta de gestión de marcadores local-first, multi-dispositivo y multi-navegador",
       "loading": "Cargando...",
       "intro": {
-        "title": "¿Qué es Pocker?",
-        "description": "Pocker es una herramienta de gestión de marcadores local-first que te permite guardar y organizar marcadores web con un solo clic y acceder a ellos desde cualquier dispositivo.",
+        "title": "¿Qué es LocalMark?",
+        "description": "LocalMark es una herramienta de gestión de marcadores local-first que te permite guardar y organizar marcadores web con un solo clic y acceder a ellos desde cualquier dispositivo.",
         "features": {
           "title": "Características clave",
           "local-first": "Almacenamiento local-first para acceso multi-dispositivo",
@@ -63,7 +63,7 @@
         }
       },
       "usage": {
-        "title": "¿Cómo usar Pocker?",
+        "title": "¿Cómo usar LocalMark?",
         "steps": {
           "setup": {
             "title": "Configura tu Bookmarklet",
@@ -71,7 +71,7 @@
           },
           "save": {
             "title": "Guardar páginas web en tu colección",
-            "description": "Cuando navegues por una página web, haz clic en el bookmarklet de Pocker en la barra de marcadores para abrir la página de añadir marcadores. Rellena la categoría y la descripción (opcional) y guarda."
+            "description": "Cuando navegues por una página web, haz clic en el bookmarklet de LocalMark en la barra de marcadores para abrir la página de añadir marcadores. Rellena la categoría y la descripción (opcional) y guarda."
           },
           "access": {
             "title": "Accede a tu colección de marcadores",
@@ -84,8 +84,8 @@
         }
       },
       "demo": {
-        "title": "¿Quieres experimentar Pocker?",
-        "description": "Prueba todas las características de Pocker sin crear una colección de marcadores",
+        "title": "¿Quieres experimentar LocalMark?",
+        "description": "Prueba todas las características de LocalMark sin crear una colección de marcadores",
         "button": "Ver demo"
       },
       "navigation": {
@@ -188,7 +188,7 @@
         "viewBookmarks": "Ver marcadores"
       },
       "Logo": {
-        "altText": "Logo de Pocker"
+        "altText": "Logo de LocalMark"
       },
       "FloatingNav": {
         "title": "Categorías",

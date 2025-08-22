@@ -1,11 +1,11 @@
-# Pocker
+# LocalMark
 
 [![AGPL LICENSE](https://img.shields.io/badge/LICENSE-AGPL-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 [![Try It Online](https://img.shields.io/badge/TryIt-Online-orange.svg)](https://getpocker.artlu.xyz)
 
 ## Introduction
 
-Pocker is a fork + rewrite of Cloudmark by Wesley Yang, a universal cloud bookmark management tool that allows you to easily save and access your bookmarks from anywhere. No login or registration required - simply create your personalized bookmark collection and start using it right away.
+LocalMark is a fork + rewrite of Cloudmark by Wesley Yang, a universal cloud bookmark management tool that allows you to easily save and access your bookmarks from anywhere. No login or registration required - simply create your personalized bookmark collection and start using it right away.
 
 Try the original online: [cloudmark.site](https://cloudmark.site)
 
@@ -23,7 +23,7 @@ Try the fork online: [getpocker.artlu.xyz](https://getpocker.artlu.xyz)
 
 ## Quick Start
 
-1. Visit [Pocker](https://getpocker.artlu.xyz)
+1. Visit [LocalMark](https://getpocker.artlu.xyz)
 2. Generate a unique identifier (mark) or use a custom one
 3. Install the bookmarklet to your browser
 4. Click the bookmarklet to save webpages while browsing
