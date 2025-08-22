@@ -1,7 +1,7 @@
 import type { NonEmptyString100 } from "@evolu/common";
 import { useRoute, useSearchParams } from "wouter";
 import { BookmarkUI } from "../components/bookmark-ui";
-import { fetchBookmarks } from "../hooks/use-bookmarks";
+import { useBookmarks } from "../hooks/use-bookmarks";
 import { defaultMark, getBaseUrl, getCategories } from "../lib/utils";
 import "./bookmarks.css";
 
@@ -17,7 +17,7 @@ export const BookmarksPage = () => {
 		toast = { status, message };
 	}
 
-	const bookmarksData = fetchBookmarks(mark);
+	const bookmarksData = useBookmarks(mark);
 	const categories = getCategories(bookmarksData || null);
 	const baseUrl = getBaseUrl();
 

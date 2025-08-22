@@ -1,8 +1,7 @@
-import { SimpleName, createEvolu, getOrThrow } from "@evolu/common";
-import { NonEmptyString100, NonEmptyString1000, id, nullOr } from "@evolu/common";
+import { SimpleName, createAppOwner, createEvolu, getOrThrow } from "@evolu/common";
+import { NonEmptyString100, NonEmptyString1000, id, nullOr, Mnemonic } from "@evolu/common";
 import { evoluReactWebDeps } from "@evolu/react-web";
-
-const EVOLU_INSTANCE = "pocker-3241038980";
+import { APP_OWNER_MNEMONIC, EVOLU_INSTANCE } from "./constants";
 
 const AboutId = id("About");
 type AboutId = typeof AboutId.Type;
@@ -26,9 +25,11 @@ const Schema = {
 	},
 };
 
+const evoluName = getOrThrow(SimpleName.from(EVOLU_INSTANCE));
+const appOwnerMnemonic = getOrThrow(Mnemonic.from(APP_OWNER_MNEMONIC));
 export const evoluInstance = createEvolu(evoluReactWebDeps)(Schema, {
-	name: getOrThrow(SimpleName.from(EVOLU_INSTANCE)),
-
+	name: evoluName,
+	initialAppOwner: createAppOwner(appOwnerMnemonic),
 	onInit: ({ isFirst }) => {
 		isFirst && evoluInstance.insert("about", { version: "1.0.0" });
 	},

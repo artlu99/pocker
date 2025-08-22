@@ -1,63 +1,22 @@
 import type { NonEmptyString100 } from "@evolu/common";
 import { useEvolu, useQuery } from "@evolu/react";
-import { retry } from "radash";
-import { useEffect } from "react";
 import { DEMO_BOOKMARKS_DATA } from "../lib/demo_data";
 import { evoluInstance } from "../lib/evolu";
-import type { BookmarkInstance, BookmarksData } from "../lib/types";
+import type { BookmarkInstance } from "../lib/types";
 import { isDemoMark, stripUrlProtocol } from "../lib/utils";
-import { useZustand } from "./use-zustand";
 
-export const useInstantiateDb = () => {
-	const { isEvoluReady, setIsEvoluReady } = useZustand();
-
-	const isUpToDate = evoluInstance.createQuery((db) =>
-		db
-			.selectFrom("about")
-			.select(["version"])
-			.orderBy("version", "desc")
-			.limit(1),
-	);
-
-	// exponential backoff to wait for Evolu instance initialization
-	useEffect(() => {
-		const checkInitialization = async () => {
-			try {
-				await retry(
-					{ delay: 100, backoff: (count) => 2 ** count * 100, times: 4 },
-					async () => {
-						// Check if we have data or if the database is still initializing
-						if (isUpToDate?.length > 0) {
-							return true; // Success - we have data
-						}
-
-						// If we still have no data after multiple retries, assume initialization is complete
-						// and the database is genuinely empty
-						throw new Error("Still initializing");
-					},
-				);
-
-				// If we get here, we have data or initialization is complete
-				setIsEvoluReady(true);
-			} catch (error) {
-				// After all retries, assume initialization is complete
-				console.log("Initialization check complete, database ready");
-				setIsEvoluReady(true);
-			}
-		};
-
-		!isEvoluReady && checkInitialization();
-	}, [isUpToDate, isEvoluReady, setIsEvoluReady]);
-
-	// Only return the result when we're ready
-	return isEvoluReady ? { isUpToDate } : null;
-};
-
-export const fetchBookmarks = (
-	mark: NonEmptyString100,
-): BookmarksData | null => {
+export const useBookmarks = (mark: NonEmptyString100) => {
 	if (isDemoMark(mark)) {
 		return DEMO_BOOKMARKS_DATA;
+	}
+
+	const aboutQuery = evoluInstance.createQuery((db) =>
+		db.selectFrom("about").select(["version"]).limit(1)
+	);
+	const aboutData = useQuery(aboutQuery);
+	
+	if (!aboutData || aboutData.length === 0) {
+		return null;
 	}
 
 	const bookmarksQuery = evoluInstance.createQuery((db) =>

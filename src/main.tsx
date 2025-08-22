@@ -1,5 +1,4 @@
 import { EvoluProvider } from "@evolu/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { StrictMode } from "react";
@@ -36,19 +35,15 @@ i18n
 		},
 	});
 
-const queryClient = new QueryClient();
-
 const root = document.getElementById("root");
 if (!root) throw new Error("root not found");
 
 createRoot(root).render(
 	<StrictMode>
 		<EvoluProvider value={evoluInstance}>
-			<QueryClientProvider client={queryClient}>
-				<ToastProvider>
-					<App />
-				</ToastProvider>
-			</QueryClientProvider>
+			<ToastProvider>
+				<App />
+			</ToastProvider>
 		</EvoluProvider>
 	</StrictMode>,
 );

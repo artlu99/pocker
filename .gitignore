@@ -9,4 +9,6 @@ worker-configuration.d.ts
 .wrangler
 .dev.vars*
 
+src/lib/constants.ts
+
 TODO.md
