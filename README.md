@@ -60,16 +60,15 @@ bun run deploy
 - [Vite 6](https://vite.dev) - The Build Tool for the Web
 - [React 19](https://react.dev) - the library for web and native user interfaces
 - [Cloudflare Workers](https://developers.cloudflare.com/workers) - serverless platform
-- [Cloudflare KV](https://developers.cloudflare.com/kv) - global, low-latency, key-value data storage.
+- [Evolu](https://evolu.dev) - privacy-focused local‑first platform that scales
 - [TailwindCSS v4](https://tailwindcss.com) - utility-first CSS framework
 - [react-i18next](https://react.i18next.com) - powerful internationalization framework based on <code>i18next</code>
 - [wouter](https://github.com/molefrog/wouter) - tiny modern router that relies on Hooks
-- [TanStack Query v5](https://tanstack.com/query/v5) - data-fetching library for web applications
 
 #### Fork and Rewrite
 
-- [x] Vite + Cloudflare Workers + Wouter replace Next.js
-- [x] React Query + `itty-fetcher` instead of `zsa` Next server actions
+- [x] Vite + Wouter replace Next.js
+- [x] no `zsa` Next server actions
 - [x] local-first rather than cloud-first
 - [x] Evolu instead of Cloudflare KV
 - [x] PWA to save to Home Screen and persist

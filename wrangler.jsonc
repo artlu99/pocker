@@ -1,11 +1,10 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "pocker",
-	"main": "worker/index.ts",
 	"compatibility_date": "2025-08-16",
 	"assets": {
-		"binding": "ASSETS",
-		"directory": "./dist/client"
+		"directory": "./dist/assets",
+		"not_found_handling": "single-page-application"
 	},
 	"observability": { "enabled": true }
 }
