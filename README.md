@@ -1,7 +1,7 @@
 # LocalMark
 
 [![AGPL LICENSE](https://img.shields.io/badge/LICENSE-AGPL-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
-[![Try It Online](https://img.shields.io/badge/TryIt-Online-orange.svg)](https://getpocker.artlu.xyz)
+[![Try It Online](https://img.shields.io/badge/TryIt-Online-orange.svg)](https://localmark.uk)
 
 ## Introduction
 
@@ -9,7 +9,7 @@ LocalMark is a fork + rewrite of Cloudmark by Wesley Yang, a universal cloud boo
 
 Try the original online: [cloudmark.site](https://cloudmark.site)
 
-Try the fork online: [getpocker.artlu.xyz](https://getpocker.artlu.xyz)
+Try the fork online: [localmark.uk](https://localmark.uk)
 
 ## Key Features
 
@@ -23,11 +23,11 @@ Try the fork online: [getpocker.artlu.xyz](https://getpocker.artlu.xyz)
 
 ## Quick Start
 
-1. Visit [LocalMark](https://getpocker.artlu.xyz)
+1. Visit [LocalMark](https://localmark.uk)
 2. Generate a unique identifier (mark) or use a custom one
 3. Install the bookmarklet to your browser
 4. Click the bookmarklet to save webpages while browsing
-5. Visit `getpocker.artlu.xyz/your-mark` anytime to view and manage your bookmarks
+5. Visit `localmark.uk/your-mark` anytime to view and manage your bookmarks
 
 ## Local Development
 
@@ -41,7 +41,7 @@ Try the fork online: [getpocker.artlu.xyz](https://getpocker.artlu.xyz)
 bun install
 ```
 
-### Development Mode with HMR + Local Preview on Cloudflare Workers
+### Development Mode with HMR
 
 ```bash
 bun dev
@@ -71,6 +71,10 @@ bun run deploy
 - [x] no `zsa` Next server actions
 - [x] local-first rather than cloud-first
 - [x] Evolu instead of Cloudflare KV
+
+## Attribution
+
+OG Images generated with [Free OG Image Generator](https://ogimage.click/)
 
 ## License
 
