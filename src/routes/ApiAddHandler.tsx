@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "wouter";
+import { useSearchParams } from "wouter";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, ExternalLink, Loader2, XCircle } from "lucide-react";
 import { useCreateBookmark } from "../hooks/use-bookmarks";
@@ -8,7 +8,7 @@ import type { NonEmptyString100 } from "@evolu/common";
 
 export const ApiAddHandler = () => {
 	const { t } = useTranslation();
-	const [location] = useLocation();
+	const [urlParams] = useSearchParams();
 	const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
 	const [message, setMessage] = useState("");
 	const [redirectUrl, setRedirectUrl] = useState("");
@@ -18,7 +18,6 @@ export const ApiAddHandler = () => {
 		const handleApiCall = async () => {
 			try {
 				// Parse query parameters
-				const urlParams = new URLSearchParams(location);
 				const mark = urlParams.get("mark");
 				const title = urlParams.get("title");
 				const url = urlParams.get("url");
@@ -62,7 +61,7 @@ export const ApiAddHandler = () => {
 		};
 
 		handleApiCall();
-	}, [createBookmark, location]);
+	}, [createBookmark, urlParams]);
 
 	const getStatusIcon = () => {
 		switch (status) {
