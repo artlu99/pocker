@@ -92,13 +92,13 @@ export const ApiAddHandler = () => {
 					<div className="flex justify-center mb-6">
 						{getStatusIcon()}
 					</div>
-					
+
 					<h1 className={`text-2xl font-bold mb-4 ${getStatusColor()}`}>
 						{status === "loading" && t("BookmarkDialog.adding")}
 						{status === "success" && t("BookmarkDialog.addSuccess")}
 						{status === "error" && t("BookmarkDialog.addFailed")}
 					</h1>
-					
+
 					<p className="text-gray-600 dark:text-gray-300 mb-6">
 						{message}
 					</p>
