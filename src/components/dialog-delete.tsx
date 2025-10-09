@@ -58,31 +58,31 @@ export function DialogDelete({
 	const onSubmit = async (data: DeleteSchema) => {
 		setIsSubmitting(true);
 		setError(null);
-		
+
 		try {
 			deleteBookmark({ mark: data.mark, id: data.id });
-			
+
 			// Show success feedback
 			showToast({
 				title: t("Components.BookmarkDialog.deleteSuccess"),
 				description: t("Components.BookmarkDialog.deleteSuccessDescription"),
 				variant: "success",
 			});
-			
+
 			onBookmarkDeleted();
-			
+
 			// Close dialog after a brief delay to show success state
 			setTimeout(() => {
 				setOpen(false);
 			}, 500);
-			
 		} catch (error) {
 			console.error("Failed to delete bookmark:", error);
-			const errorMessage = error instanceof Error 
-				? error.message 
-				: t("Components.BookmarkDialog.deleteError");
+			const errorMessage =
+				error instanceof Error
+					? error.message
+					: t("Components.BookmarkDialog.deleteError");
 			setError(errorMessage);
-			
+
 			// Show error toast
 			showToast({
 				title: t("Components.BookmarkDialog.deleteError"),

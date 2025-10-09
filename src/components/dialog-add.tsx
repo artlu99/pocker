@@ -1,12 +1,13 @@
+import type { NonEmptyString100 } from "@evolu/common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+	CheckCircle,
 	FileText,
 	Link,
 	Loader2,
 	Plus,
 	PlusCircle,
 	Tag,
-	CheckCircle,
 	XCircle,
 } from "lucide-react";
 import type React from "react";
@@ -14,8 +15,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useCreateBookmark } from "../hooks/use-bookmarks";
-import { type InsertSchema, insertSchema } from "../lib/schema";
-import type { BookmarkInstance, NonEmptyString100 } from "../lib/types";
+import { insertSchema, type InsertSchema } from "../lib/schema";
+import type { BookmarkInstance } from "../lib/types";
+import { useToast } from "./toast-provider";
 import { Button } from "./ui/button";
 import {
 	Dialog,
@@ -45,7 +47,6 @@ import {
 	SelectValue,
 } from "./ui/select";
 import { Textarea } from "./ui/textarea";
-import { useToast } from "./toast-provider";
 
 interface DialogCreateProps {
 	mark: string;
@@ -107,7 +108,7 @@ export function DialogAdd({
 	const onSubmit = async (data: InsertSchema) => {
 		setIsSubmitting(true);
 		setError(null);
-		
+
 		try {
 			const categoryValue = isCreatingNewCategory ? newCategory : data.category;
 			const bookmark = createBookmark({
@@ -115,29 +116,29 @@ export function DialogAdd({
 				mark: data.mark as NonEmptyString100,
 				category: categoryValue,
 			});
-			
+
 			// Show success feedback
 			showToast({
 				title: t("Components.BookmarkDialog.addSuccess"),
 				description: t("Components.BookmarkDialog.addSuccessDescription"),
 				variant: "success",
 			});
-			
+
 			onBookmarkAdded(bookmark);
 			form.reset();
-			
+
 			// Close dialog after a brief delay to show success state
 			setTimeout(() => {
 				setOpen(false);
 			}, 500);
-			
 		} catch (error) {
 			console.error("Failed to create bookmark:", error);
-			const errorMessage = error instanceof Error 
-				? error.message 
-				: t("Components.BookmarkDialog.addError");
+			const errorMessage =
+				error instanceof Error
+					? error.message
+					: t("Components.BookmarkDialog.addError");
 			setError(errorMessage);
-			
+
 			// Show error toast
 			showToast({
 				title: t("Components.BookmarkDialog.addError"),
@@ -196,12 +197,16 @@ export function DialogAdd({
 									</FormLabel>
 									<FormControl>
 										<Input
-											placeholder={t("Components.BookmarkDialog.urlPlaceholder")}
+											placeholder={t(
+												"Components.BookmarkDialog.urlPlaceholder",
+											)}
 											className="border-blue-500/20 focus:border-blue-500/40 bg-blue-500/5 focus:ring-blue-500/10"
 											{...field}
 										/>
 									</FormControl>
-									<FormDescription>{t("Components.BookmarkDialog.urlDescription")}</FormDescription>
+									<FormDescription>
+										{t("Components.BookmarkDialog.urlDescription")}
+									</FormDescription>
 									<FormMessage />
 								</FormItem>
 							)}

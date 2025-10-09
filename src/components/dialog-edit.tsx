@@ -84,7 +84,9 @@ export function DialogEdit({
 	});
 
 	// Track form changes
-	const { formState: { isDirty } } = form;
+	const {
+		formState: { isDirty },
+	} = form;
 
 	// Reset error when dialog opens/closes
 	const handleOpenChange = (newOpen: boolean) => {
@@ -114,7 +116,7 @@ export function DialogEdit({
 	const onSubmit = async (data: UpdateSchema) => {
 		setIsSubmitting(true);
 		setError(null);
-		
+
 		try {
 			const categoryValue = isCreatingNewCategory ? newCategory : data.category;
 			const updatedBookmark = updateBookmark({
@@ -122,28 +124,28 @@ export function DialogEdit({
 				...data,
 				category: categoryValue,
 			});
-			
+
 			// Show success feedback
 			showToast({
 				title: t("Components.BookmarkDialog.updateSuccess"),
 				description: t("Components.BookmarkDialog.updateSuccessDescription"),
 				variant: "success",
 			});
-			
+
 			onBookmarkUpdated(updatedBookmark);
-			
+
 			// Close dialog after a brief delay to show success state
 			setTimeout(() => {
 				setOpen(false);
 			}, 500);
-			
 		} catch (error) {
 			console.error("Failed to update bookmark:", error);
-			const errorMessage = error instanceof Error 
-				? error.message 
-				: t("Components.BookmarkDialog.updateError");
+			const errorMessage =
+				error instanceof Error
+					? error.message
+					: t("Components.BookmarkDialog.updateError");
 			setError(errorMessage);
-			
+
 			// Show error toast
 			showToast({
 				title: t("Components.BookmarkDialog.updateError"),

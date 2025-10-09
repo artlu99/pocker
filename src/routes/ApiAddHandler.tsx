@@ -9,7 +9,9 @@ import type { NonEmptyString100 } from "@evolu/common";
 export const ApiAddHandler = () => {
 	const { t } = useTranslation();
 	const [urlParams] = useSearchParams();
-	const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+	const [status, setStatus] = useState<"loading" | "success" | "error">(
+		"loading",
+	);
 	const [message, setMessage] = useState("");
 	const [redirectUrl, setRedirectUrl] = useState("");
 	const createBookmark = useCreateBookmark();
@@ -52,11 +54,12 @@ export const ApiAddHandler = () => {
 				setTimeout(() => {
 					window.location.href = `${getBaseUrl()}/${mark}`;
 				}, 3000);
-
 			} catch (error) {
 				console.error("Failed to add bookmark:", error);
 				setStatus("error");
-				setMessage(error instanceof Error ? error.message : "Failed to add bookmark");
+				setMessage(
+					error instanceof Error ? error.message : "Failed to add bookmark",
+				);
 			}
 		};
 
@@ -89,9 +92,7 @@ export const ApiAddHandler = () => {
 		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-blue-950 dark:via-slate-900 dark:to-purple-950">
 			<div className="max-w-md w-full mx-4">
 				<div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 p-8 text-center">
-					<div className="flex justify-center mb-6">
-						{getStatusIcon()}
-					</div>
+					<div className="flex justify-center mb-6">{getStatusIcon()}</div>
 
 					<h1 className={`text-2xl font-bold mb-4 ${getStatusColor()}`}>
 						{status === "loading" && t("BookmarkDialog.adding")}
@@ -99,9 +100,7 @@ export const ApiAddHandler = () => {
 						{status === "error" && t("BookmarkDialog.addFailed")}
 					</h1>
 
-					<p className="text-gray-600 dark:text-gray-300 mb-6">
-						{message}
-					</p>
+					<p className="text-gray-600 dark:text-gray-300 mb-6">{message}</p>
 
 					{status === "success" && redirectUrl && (
 						<div className="space-y-4">
