@@ -3,7 +3,7 @@ import { createUseEvolu, useQuery } from "@evolu/react";
 import { useCallback } from "react";
 import { evoluInstance } from "../lib/evolu";
 import type { BookmarkInstance } from "../lib/types";
-import { stripUrlProtocol } from "../lib/utils";
+import { isValidHttpUrlScheme, stripUrlProtocol } from "../lib/utils";
 
 const useEvolu = createUseEvolu(evoluInstance);
 
@@ -62,6 +62,11 @@ export const useCreateBookmark = () => {
 		(bookmark: Omit<BookmarkInstance, "id" | "createdAt" | "updatedAt">): BookmarkInstance => {
 			const now = new Date().toISOString();
 
+			// Validate URL scheme before storing (only http/https allowed)
+			if (!isValidHttpUrlScheme(bookmark.url)) {
+				throw new Error("Invalid URL: only http:// and https:// URLs are allowed");
+			}
+
 			// Transform URL to Base64Url format (strip protocol)
 			const transformedBookmark = {
 				...bookmark,
@@ -97,6 +102,11 @@ export const useUpdateBookmark = () => {
 
 	return useCallback(
 		(bookmark: BookmarkInstance): BookmarkInstance => {
+			// Validate URL scheme before storing (only http/https allowed)
+			if (!isValidHttpUrlScheme(bookmark.url)) {
+				throw new Error("Invalid URL: only http:// and https:// URLs are allowed");
+			}
+
 			// Transform URL to Base64Url format (strip protocol)
 			const transformedBookmark = {
 				...bookmark,

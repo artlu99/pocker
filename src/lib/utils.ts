@@ -50,3 +50,61 @@ export function addUrlProtocol(url: string): string {
 	}
 	return `https://${url}`;
 }
+
+/**
+ * Escape HTML special characters to prevent XSS.
+ * Converts: & -> &amp;, < -> &lt;, > -> &gt;, " -> &quot;, ' -> &#39;
+ */
+export function escapeHtml(unsafe: string): string {
+	return unsafe
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;");
+}
+
+/**
+ * Validate that a URL has a safe scheme (http or https only).
+ * Returns false for javascript:, data:, vbscript:, file:, etc.
+ */
+export function isValidHttpUrlScheme(url: string): boolean {
+	try {
+		// Add protocol if missing for validation purposes
+		const urlWithProtocol = url.match(/^https?:\/\//)
+			? url
+			: `https://${url}`;
+		const parsed = new URL(urlWithProtocol);
+		return parsed.protocol === "http:" || parsed.protocol === "https:";
+	} catch {
+		return false;
+	}
+}
+
+/**
+ * Validate that a favicon URL is safe for use in <img src>.
+ * Allows: https:, http:, and data: URLs with image MIME types only.
+ * Rejects: javascript:, vbscript:, and non-image data: URLs.
+ */
+export function isValidFaviconUrl(favicon: string): boolean {
+	if (!favicon) return true; // Empty is fine
+
+	try {
+		// Check for data: URLs with image MIME types
+		if (favicon.startsWith("data:image/")) {
+			// Basic check for data:image/ prefix
+			return /^data:image\/(png|gif|jpeg|webp|svg\+xml);base64,[a-zA-Z0-9+/=]+$/.test(
+				favicon,
+			);
+		}
+
+		// For regular URLs, only allow http/https
+		const urlWithProtocol = favicon.match(/^https?:\/\//)
+			? favicon
+			: `https://${favicon}`;
+		const parsed = new URL(urlWithProtocol);
+		return parsed.protocol === "http:" || parsed.protocol === "https:";
+	} catch {
+		return false;
+	}
+}

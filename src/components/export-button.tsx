@@ -2,6 +2,7 @@ import { Download } from "lucide-react";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import type { BookmarkInstance, BookmarksData } from "../lib/types.ts";
+import { addUrlProtocol, escapeHtml, isValidFaviconUrl, isValidHttpUrlScheme } from "../lib/utils.ts";
 import { useToast } from "./toast-provider.tsx";
 import { Button } from "./ui/button.tsx";
 
@@ -47,19 +48,38 @@ export const ExportButton = ({ bookmarksData }: ExportButtonProps) => {
 
 		// Add bookmarks grouped by category
 		for (const [category, bookmarks] of Object.entries(bookmarksByCategory)) {
+			// Escape category for HTML
+			const escapedCategory = escapeHtml(category);
 			htmlContent += `
-        <DT><H3 ADD_DATE="${Math.floor(Date.now() / 1000)}" LAST_MODIFIED="${Math.floor(Date.now() / 1000)}">${category}</H3></DT>
+        <DT><H3 ADD_DATE="${Math.floor(Date.now() / 1000)}" LAST_MODIFIED="${Math.floor(Date.now() / 1000)}">${escapedCategory}</H3></DT>
         <DL><p>`;
-			
+
 			for (const bookmark of bookmarks) {
 				const addDate = Math.floor(new Date(bookmark.createdAt).getTime() / 1000);
 				const lastModified = Math.floor(new Date(bookmark.updatedAt).getTime() / 1000);
-				const url = bookmark.url.startsWith('http') ? bookmark.url : `https://${bookmark.url}`;
-				
+
+				// Validate URL scheme before including in export
+				const url = addUrlProtocol(bookmark.url);
+				if (!isValidHttpUrlScheme(url)) {
+					// Skip bookmarks with invalid URL schemes in export
+					console.warn(`Skipping bookmark with invalid URL scheme: ${bookmark.url}`);
+					continue;
+				}
+
+				// Validate and escape favicon URL
+				let safeFavicon = "";
+				if (bookmark.favicon && isValidFaviconUrl(bookmark.favicon)) {
+					safeFavicon = escapeHtml(bookmark.favicon);
+				}
+
+				// Escape title and URL for HTML
+				const escapedTitle = escapeHtml(bookmark.title);
+				const escapedUrl = escapeHtml(url);
+
 				htmlContent += `
-            <DT><A HREF="${url}" ADD_DATE="${addDate}" LAST_MODIFIED="${lastModified}" ICON="${bookmark.favicon || ''}">${bookmark.title}</A></DT>`;
+            <DT><A HREF="${escapedUrl}" ADD_DATE="${addDate}" LAST_MODIFIED="${lastModified}" ICON="${safeFavicon}">${escapedTitle}</A></DT>`;
 			}
-			
+
 			htmlContent += `
         </p></DL>`;
 		}

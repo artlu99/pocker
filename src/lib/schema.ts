@@ -6,18 +6,24 @@ export const baseSchema = z.object({
 	url: z.string()
 		.min(1, "URL is required")
 		.refine((url) => {
-			// Allow URLs with or without protocol
+			// Add protocol if missing for validation
 			const urlWithProtocol = url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`;
 			try {
-				new URL(urlWithProtocol);
-				return true;
+				const parsed = new URL(urlWithProtocol);
+				// Only allow http or https schemes - reject javascript:, data:, vbscript:, etc.
+				return parsed.protocol === 'http:' || parsed.protocol === 'https:';
 			} catch {
 				return false;
 			}
-		}, "Please enter a valid URL"),
-	title: z.string().min(1),
+		}, "URL must use http:// or https:// protocol"),
+	title: z.string()
+		.min(1, "Title is required")
+		.max(1000, "Title must be less than 1000 characters")
+		.refine((title) => !/<[^>]*>/g.test(title), "Title cannot contain HTML tags"),
 	description: z.string().optional().or(z.literal("")),
-	category: z.string().min(1),
+	category: z.string()
+		.min(1, "Category is required")
+		.max(100, "Category must be less than 100 characters"),
 });
 
 export const insertSchema = z.object({
@@ -38,16 +44,19 @@ export const bookmarkInstanceSchema = z.object({
 	url: z.string()
 		.min(1, "URL is required")
 		.refine((url) => {
-			// Allow URLs with or without protocol
+			// Add protocol if missing for validation
 			const urlWithProtocol = url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`;
 			try {
-				new URL(urlWithProtocol);
-				return true;
+				const parsed = new URL(urlWithProtocol);
+				// Only allow http or https schemes
+				return parsed.protocol === 'http:' || parsed.protocol === 'https:';
 			} catch {
 				return false;
 			}
-		}, "Please enter a valid URL"),
-	title: z.string().min(1),
+		}, "URL must use http:// or https:// protocol"),
+	title: z.string()
+		.min(1, "Title is required")
+		.refine((title) => !/<[^>]*>/g.test(title), "Title cannot contain HTML tags"),
 	favicon: z.string().optional(),
 	description: z.string().optional().or(z.literal("")),
 	category: z.string().min(1),

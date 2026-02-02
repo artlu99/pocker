@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "wouter";
 import { useCreateBookmark } from "../hooks/use-bookmarks";
-import { DEFAULT_CATEGORY, getBaseUrl } from "../lib/utils";
+import { DEFAULT_CATEGORY, getBaseUrl, isValidHttpUrlScheme } from "../lib/utils";
 
 export const ApiAddHandler = () => {
 	const { t } = useTranslation();
@@ -27,17 +27,22 @@ export const ApiAddHandler = () => {
 					throw new Error("Missing required parameters: title, or url");
 				}
 
-				// Validate URL format
-				try {
-					new URL(url);
-				} catch {
-					throw new Error("Invalid URL format");
+				// Sanitize title: remove any HTML tags
+				const sanitizedTitle = title.replace(/<[^>]*>/g, "").trim();
+
+				if (!sanitizedTitle) {
+					throw new Error("Invalid title: title cannot be empty after sanitization");
+				}
+
+				// Validate URL format and scheme (only http/https allowed)
+				if (!isValidHttpUrlScheme(url)) {
+					throw new Error("Invalid URL: only http:// and https:// URLs are allowed");
 				}
 
 				// Create the bookmark
 				createBookmark({
 					url,
-					title,
+					title: sanitizedTitle,
 					category: DEFAULT_CATEGORY,
 					description: "", // Optional description
 				});
