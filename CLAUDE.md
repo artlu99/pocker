@@ -8,10 +8,10 @@
 
 ## Stack
 
-- **Build:** Vite 6, TypeScript, React 19.
+- **Build:** Vite 7, TypeScript, React 19.
 - **Routing:** wouter (`Route`, `Switch`, `Link`, `useRoute`, `useSearchParams`, `useLocation`).
 - **i18n:** react-i18next, i18next-browser-languagedetector; `src/i18n/en.json`, `es.json`, `zh.json`.
-- **Data:** Evolu (`@evolu/common`, `@evolu/react`, `@evolu/react-web`). Local-first; config in `src/lib/evolu.ts`; secrets in `src/lib/constants.ts` (`EVOLU_INSTANCE`, `APP_OWNER_MNEMONIC`).
+- **Data:** Evolu (`@evolu/common`, `@evolu/react`, `@evolu/react-web`). Local-first; config in `src/lib/evolu.ts`.
 - **Validation:** Zod; schemas in `src/lib/schema.ts`.
 - **UI:** Radix (Dialog, DropdownMenu, Label, Select, Slot), react-hook-form + @hookform/resolvers, lucide-react, date-fns, clsx/tailwind-merge/class-variance-authority. Primitives in `src/components/ui/`.
 - **Deploy:** Wrangler, @cloudflare/vite-plugin; `wrangler.jsonc`, `vite.config.ts`.
@@ -25,7 +25,7 @@
 - `src/routes/` — Route components: Landing, Doc, ApiAddHandler, BookmarksPage.
 - `src/components/` — Feature components + `ui/` (Radix/shadcn-style primitives).
 - `src/hooks/` — use-bookmarks.ts (Evolu queries and mutations).
-- `src/lib/` — evolu.ts, schema.ts, types.ts, utils.ts, constants.ts, demo_data.ts.
+- `src/lib/` — evolu.ts, schema.ts, types.ts, utils.ts.
 - `public/` — Favicons, icon1.svg, placeholder.svg, OG images.
 - `index.html` — Single root div.
 
@@ -44,8 +44,8 @@
 | Path | Component | Purpose |
 |------|-----------|--------|
 | `/` | `src/routes/BookmarksPage.tsx` | When no bookmarks data: shows Landing (hero, features, i18n, links to /doc and external demo). Else: BookmarkUI. Uses `useBookmarks()`, `getCategories`, `getBaseUrl`; optional `?status=&message=` for toast. |
-| `/doc` | `src/routes/Doc.tsx` | Bookmarklet setup: mark input/generate, bookmarklet code (opens `/api/add?mark=&title=&url=`), copy, instructions |
-| `/api/add` | `src/routes/ApiAddHandler.tsx` | GET; query params `mark`, `title`, `url`. Validates URL, calls `useCreateBookmark()`, then loading/success/error UI and redirect to `/{mark}` |
+| `/doc` | `src/routes/Doc.tsx` | Bookmarklet setup: bookmarklet code (opens `/api/add?title=&url=`), copy, instructions |
+| `/api/add` | `src/routes/ApiAddHandler.tsx` | GET; query params `title`, `url`. Validates URL, calls `useCreateBookmark()`, then loading/success/error UI and redirect to base URL |
 | `/sync` | `src/routes/Sync.tsx` | Sync / Evolu sync UI |
 | (default) | — | 404 |
 
@@ -54,8 +54,8 @@
 ## Data layer
 
 - **Evolu schema** (`src/lib/evolu.ts`):
-  - `bookmark`: id, mark, url, title, favicon (nullable), description (nullable), category; Evolu adds isDeleted, timestamps, etc. Field types: NonEmptyString100/1000, nullOr where applicable.
-- **Zod** (`src/lib/schema.ts`): baseSchema (url, title, description?, category), insertSchema (+ mark), updateSchema/deleteSchema, bookmarkInstanceSchema (full instance with id, createdAt, updatedAt).
+  - `bookmark`: id, url, title, favicon (nullable), description (nullable), category; Evolu adds isDeleted, timestamps, etc. Field types: NonEmptyString100/1000, nullOr where applicable.
+- **Zod** (`src/lib/schema.ts`): baseSchema (url, title, description?, category), insertSchema (same shape), updateSchema/deleteSchema, bookmarkInstanceSchema (full instance with id, createdAt, updatedAt).
 - **Types** (`src/lib/types.ts`): `BookmarkInstance`, `BookmarksData` (bookmarks array).
 
 ---
@@ -66,7 +66,7 @@
   - Evolu query on `bookmark` where `isDeleted` is null, orderBy updatedAt desc, limit 100. Returns `{ bookmarks }` or null.
 - `useCreateBookmark()`: Returns callback(bookmark). Strips URL protocol; empty description omitted for Evolu. Insert then return created row shape.
 - `useUpdateBookmark()`: Callback(bookmark). Strips URL protocol. Update by id; empty description handled.
-- `useDeleteBookmark()`: Callback({ mark, id }). Update bookmark set isDeleted true.
+- `useDeleteBookmark()`: Callback({ id }). Update bookmark set isDeleted true.
 
 ---
 

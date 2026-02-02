@@ -24,10 +24,10 @@ Try the fork online: [localmark.uk](https://localmark.uk)
 ## Quick Start
 
 1. Visit [LocalMark](https://localmark.uk)
-2. Generate a unique identifier (mark) or use a custom one
 3. Install the bookmarklet to your browser
 4. Click the bookmarklet to save webpages while browsing
-5. Visit `localmark.uk/your-mark` anytime to view and manage your bookmarks
+5. Visit `localmark.uk/` anytime to view and manage your bookmarks
+6. (optional) synchronize across multiple browsers and devices
 
 ## Local Development
 
@@ -57,9 +57,8 @@ bun run deploy
 
 ## Technology Stack
 
-- [Vite 6](https://vite.dev) - The Build Tool for the Web
+- [Vite 7](https://vite.dev) - The Build Tool for the Web
 - [React 19](https://react.dev) - the library for web and native user interfaces
-- [Cloudflare Workers](https://developers.cloudflare.com/workers) - serverless platform
 - [Evolu](https://evolu.dev) - privacy-focused local‑first platform that scales
 - [TailwindCSS v4](https://tailwindcss.com) - utility-first CSS framework
 - [react-i18next](https://react.i18next.com) - powerful internationalization framework based on <code>i18next</code>
