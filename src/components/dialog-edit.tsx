@@ -50,14 +50,12 @@ import { Textarea } from "./ui/textarea";
 import { useToast } from "./toast-provider";
 
 interface DialogEditProps {
-	mark: string;
 	bookmark: BookmarkInstance;
 	categories: string[];
 	onBookmarkUpdated: (bookmark: BookmarkInstance) => void;
 }
 
 export function DialogEdit({
-	mark,
 	bookmark,
 	categories,
 	onBookmarkUpdated,
@@ -74,7 +72,6 @@ export function DialogEdit({
 	const form = useForm<UpdateSchema>({
 		resolver: zodResolver(updateSchema),
 		defaultValues: {
-			mark,
 			id: bookmark.id,
 			url: addUrlProtocol(bookmark.url), // Restore protocol for display
 			title: bookmark.title,
@@ -97,6 +94,24 @@ export function DialogEdit({
 		}
 	};
 
+	const performCategoryUpdate = (categoryValue: string) => {
+		const values = form.getValues();
+		const payload = {
+			...bookmark,
+			url: values.url,
+			title: values.title,
+			description: values.description ?? "",
+			category: categoryValue,
+		};
+		const updated = updateBookmark(payload);
+		showToast({
+			title: t("Components.BookmarkDialog.updateSuccess"),
+			description: t("Components.BookmarkDialog.updateSuccessDescription"),
+			variant: "success",
+		});
+		onBookmarkUpdated(updated);
+	};
+
 	const handleCategoryChange = (value: string) => {
 		if (value === "new_category") {
 			setIsCreatingNewCategory(true);
@@ -104,13 +119,33 @@ export function DialogEdit({
 		} else {
 			setIsCreatingNewCategory(false);
 			form.setValue("category", value);
+			// Save immediately when user picks an existing category
+			setIsSubmitting(true);
+			setError(null);
+			try {
+				performCategoryUpdate(value);
+			} catch (err) {
+				console.error("Failed to update category:", err);
+				const msg =
+					err instanceof Error
+						? err.message
+						: t("Components.BookmarkDialog.updateError");
+				setError(msg);
+				showToast({
+					title: t("Components.BookmarkDialog.updateError"),
+					description: msg,
+					variant: "error",
+				});
+			} finally {
+				setIsSubmitting(false);
+			}
 		}
 	};
 
 	const handleNewCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
 		setNewCategory(value);
-		form.setValue("category", value);
+		form.setValue("category", value, { shouldDirty: true });
 	};
 
 	const onSubmit = async (data: UpdateSchema) => {

@@ -52,8 +52,8 @@
         },
         "bookmarklet": {
           "title": "Instala la herramienta de marcador",
-          "saveButton": "Guardar en {{mark}}",
-          "openButton": "Abrir {{mark}} Marcadores",
+          "saveButton": "Guardar marcador",
+          "openButton": "Abrir marcadores",
           "dragTip": "Arrastra a la barra de marcadores",
           "description": "Arrastra el botón anterior a la barra de marcadores de tu navegador para guardar la página web actual en cualquier momento."
         },
@@ -75,7 +75,7 @@
           },
           "access": {
             "title": "Accede a tu colección de marcadores",
-            "description": "Accede a {{baseUrl}}/{{mark}} para ver y gestionar todos tus marcadores guardados. Puedes acceder a esta URL desde cualquier dispositivo o navegador."
+            "description": "Accede a {{baseUrl}} para ver y gestionar todos tus marcadores guardados. Puedes acceder desde cualquier dispositivo o navegador importando tu mnemónico compartido."
           },
           "manage": {
             "title": "Organiza y gestiona tus marcadores",
@@ -97,18 +97,19 @@
     },
     "Navigation": {
       "quickstart": "Empieza rápido",
+      "sync": "Sync de nube privada",
       "github": "GitHub",
       "switchLanguage": "Cambiar idioma"
     },
     "BookmarksPage": {
       "title": "Marcadores",
-      "collection": "Colección {{mark}}",
+      "collection": "Colección",
       "addBookmark": "Añadir marcador",
       "noBookmarks": "No hay marcadores todavía",
       "addFirstBookmark": "Añade tu primer marcador",
       "loading": "Cargando marcadores...",
       "bookmarkletTip": "Arrastra este botón a la barra de marcadores para guardar páginas con un solo clic",
-      "saveButton": "Guardar en {{mark}}",
+      "saveButton": "Guardar marcador",
       "dragTip": "Arrastra a la barra de marcadores",
       "demoMode": "Modo demo",
       "demoDescription": "Esta es una colección de demostración. Puedes añadir, editar y eliminar marcadores libremente. Todos los cambios solo afectarán a tu vista local y no se guardarán en el servidor.",
@@ -117,6 +118,17 @@
       "error": "Error",
       "warning": "Advertencia",
       "info": "Información"
+    },
+    "SyncPage": {
+      "title": "Sincronización multi-plataforma",
+      "description": "Importa tu mnemónico compartido para sincronizar marcadores.",
+      "copyMnemonic": "Copiar mnemónico",
+      "copiedMnemonic": "Mnemónico copiado al portapapeles",
+      "button": "Sincronizar ahora",
+      "error": "Error",
+      "resetButton": "Borrar datos locales",
+      "resetConfirm": "¿Estás seguro? Esto borrará todos tus datos locales y no se puede recuperar.",
+      "resetSuccess": "Datos locales borrados correctamente"
     },
     "Components": {
       "MarkInput": {
@@ -133,7 +145,7 @@
       },
       "BookmarkDialog": {
         "addTitle": "Añadir marcador",
-        "addDescription": "Añade un nuevo marcador a la colección {{mark}}",
+        "addDescription": "Añade nuevo marcador a la colección",
         "editTitle": "Editar marcador",
         "editDescription": "Editar información del marcador",
         "deleteTitle": "Eliminar marcador",

@@ -5,14 +5,12 @@ import { useLocation } from "wouter";
 import type { BookmarkInstance, BookmarksData } from "../lib/types.ts";
 import { BookmarkCard } from "./bookmark-card.tsx";
 import { BookmarkletButton } from "./bookmarklet-button";
-import { DemoBanner } from "./demo-banner.tsx";
 import { DialogAdd } from "./dialog-add.tsx";
 import { ExportButton } from "./export-button.tsx";
 import { FloatingNav } from "./floating-nav.tsx";
 import { useToast } from "./toast-provider";
 
 export interface BookmarkUIProps {
-	mark: string;
 	bookmarksData: BookmarksData | null;
 	categories: string[];
 	toast: { status: string; message: string } | null;
@@ -20,7 +18,6 @@ export interface BookmarkUIProps {
 }
 
 export const BookmarkUI = ({
-	mark,
 	bookmarksData,
 	categories,
 	toast,
@@ -52,8 +49,8 @@ export const BookmarkUI = ({
 	}, [toast, showToast, t]);
 
 	const refreshBookmarks = useCallback(() => {
-		setLocation(`/${mark}`);
-	}, [mark, setLocation]);
+		setLocation("/");
+	}, [setLocation]);
 
 	const onBookmarkAdded = useCallback(
 		(bookmark: BookmarkInstance) => {
@@ -112,8 +109,6 @@ export const BookmarkUI = ({
 			</div>
 
 			<div className="py-12 lg:py-16 scroll-smooth">
-				<DemoBanner mark={mark} />
-
 				{/* 标题区域 */}
 				<div className="title-area flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
 					<div>
@@ -124,24 +119,22 @@ export const BookmarkUI = ({
 						</div>
 
 						<div className="flex items-center gap-2">
-							<ExportButton bookmarksData={bookmarksData} mark={mark} />
+							<ExportButton bookmarksData={bookmarksData} />
 
 							<p className="subtitle-text text-muted-foreground">
-								{t("BookmarksPage.collection", { mark })}
+								{t("BookmarksPage.collection")}
 							</p>
 						</div>
-
 					</div>
 
 					<div className="flex flex-col sm:flex-row gap-3">
 						<DialogAdd
-							mark={mark}
 							categories={categories}
 							onBookmarkAdded={onBookmarkAdded}
 						/>
 
 						<div>
-							<BookmarkletButton mark={mark} baseUrl={baseUrl} />
+							<BookmarkletButton baseUrl={baseUrl} />
 							<div className="hidden sm:flex items-center mt-1 text-xs text-muted-foreground">
 								<span className="animate-pulse">↑</span>
 								<span className="ml-1">{t("BookmarksPage.dragTip")}</span>
@@ -187,7 +180,6 @@ export const BookmarkUI = ({
 											>
 												<BookmarkCard
 													bookmark={bookmark}
-													mark={mark}
 													categories={categories}
 													onBookmarkUpdated={onUpdateBookmark}
 													onBookmarkDeleted={() =>
@@ -216,7 +208,6 @@ export const BookmarkUI = ({
 								</p>
 								<div className="hover-scale flex justify-center">
 									<DialogAdd
-										mark={mark}
 										categories={categories}
 										onBookmarkAdded={onBookmarkAdded}
 									/>

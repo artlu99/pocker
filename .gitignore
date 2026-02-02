@@ -1,14 +1,10 @@
 node_modules
 dist
-*.local
-.vscode
 bun.lock
 
 # wrangler files
 worker-configuration.d.ts
 .wrangler
 .dev.vars*
-
-src/lib/constants.ts
 
 TODO.md

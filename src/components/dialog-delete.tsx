@@ -21,13 +21,11 @@ import { Form, FormDescription } from "./ui/form";
 import { useToast } from "./toast-provider";
 
 interface DialogDeleteProps {
-	mark: string;
 	bookmark: BookmarkInstance;
 	onBookmarkDeleted: () => void;
 }
 
 export function DialogDelete({
-	mark,
 	bookmark,
 	onBookmarkDeleted,
 }: DialogDeleteProps) {
@@ -41,7 +39,6 @@ export function DialogDelete({
 	const form = useForm<DeleteSchema>({
 		resolver: zodResolver(deleteSchema),
 		defaultValues: {
-			mark,
 			id: bookmark.id,
 		},
 	});
@@ -60,7 +57,7 @@ export function DialogDelete({
 		setError(null);
 
 		try {
-			deleteBookmark({ mark: data.mark, id: data.id });
+			deleteBookmark({ id: data.id });
 
 			// Show success feedback
 			showToast({

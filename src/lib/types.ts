@@ -10,6 +10,5 @@ export interface BookmarkInstance {
 }
 
 export interface BookmarksData {
-	mark: string;
 	bookmarks: BookmarkInstance[];
 }

@@ -1,4 +1,4 @@
-import { FileText } from "lucide-react";
+import { CloudDownload, FileText } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { Link } from "wouter";
@@ -16,6 +16,14 @@ export function Navigation() {
 			>
 				<FileText className="h-4 w-4" />
 				<span className="hidden sm:inline">{t("Navigation.quickstart")}</span>
+			</Link>
+
+			<Link
+				href="/sync"
+				className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground hover:text-primary hover:bg-primary/5 transition-colors duration-200"
+			>
+				<CloudDownload className="h-4 w-4" />
+				<span className="hidden sm:inline">{t("Navigation.sync")}</span>
 			</Link>
 
 			<Button variant="ghost" asChild>

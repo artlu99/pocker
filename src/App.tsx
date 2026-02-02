@@ -5,7 +5,7 @@ import { Navigation } from "./components/Navigation";
 import { ApiAddHandler } from "./routes/ApiAddHandler";
 import { BookmarksPage } from "./routes/BookmarksPage";
 import { Doc } from "./routes/Doc";
-import { Landing } from "./routes/Landing";
+import { Sync } from "./routes/Sync";
 
 function App() {
 	const { t } = useTranslation();
@@ -39,10 +39,10 @@ function App() {
 			<div>
 				<main className="flex-1">
 					<Switch>
-						<Route path="/" component={Landing} />
+						<Route path="/" component={BookmarksPage} />
 						<Route path="/doc" component={Doc} />
 						<Route path="/api/add" component={ApiAddHandler} />
-						<Route path="/:mark" component={BookmarksPage} />
+						<Route path="/sync" component={Sync} />
 						{/* Default route in a switch */}
 						<Route>404: No such page!</Route>
 					</Switch>

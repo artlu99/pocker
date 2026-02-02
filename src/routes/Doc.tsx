@@ -1,101 +1,46 @@
 import {
 	Book,
-	BookOpen,
 	Bookmark,
+	BookOpen,
 	Check,
 	CheckCircle,
-	ChevronRight,
 	Code,
 	Copy,
 	ExternalLink,
 	HashIcon,
-	RefreshCcw,
 	Wand2,
 } from "lucide-react";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "wouter";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-import { generateRandomMark, getBaseUrl } from "../lib/utils";
+import { getBaseUrl } from "../lib/utils";
+
 import "./doc.css";
 
 export const Doc = () => {
 	const { t } = useTranslation();
-	// 创建 bookmarklet 的 mark 参数
-	const [mark, setMark] = useState("");
-	// 生成的 bookmarklet 代码
-	const [bookmarkletCode, setBookmarkletCode] = useState("");
+
 	// 复制按钮状态
 	const [copied, setCopied] = useState(false);
-	// 随机生成中状态
-	const [isGenerating, setIsGenerating] = useState(false);
 
 	// 获取当前网站的基础 URL
 	const baseUrl = getBaseUrl();
 
 	// 生成 bookmarklet 代码
-	const generateBookmarkletCode = useCallback(
-		(markValue: string) => {
-			const code = `javascript:(function(){let m='${markValue}',u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open('${baseUrl}/api/add?mark='+m+'&title='+t+'&url='+u, '_blank').focus()})()`;
-			setBookmarkletCode(code);
-			return code;
-		},
-		[baseUrl],
-	);
-
-	// 当 mark 值改变时更新 bookmarklet 代码
-	useEffect(() => {
-		if (mark) {
-			generateBookmarkletCode(mark);
-		}
-	}, [mark, generateBookmarkletCode]);
-
-	// 初始化随机 mark
-	useEffect(() => {
-		setMark(generateRandomMark());
-	}, []);
+	const bookmarkletCode = `javascript:(function(){u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open('${baseUrl}/api/add?title='+t+'&url='+u, '_blank').focus()})()`;
 
 	// 处理复制 bookmarklet 代码
 	const handleCopy = () => {
-		navigator.clipboard.writeText(
-			bookmarkletCode || generateBookmarkletCode(mark),
-		);
+		navigator.clipboard.writeText(bookmarkletCode);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);
 	};
 
-	// 生成随机 mark 值
-	const handleGenerateRandom = () => {
-		setIsGenerating(true);
-		setMark(generateRandomMark());
-		setTimeout(() => setIsGenerating(false), 500);
+	const handleDragStart = (e: React.DragEvent) => {
+		e.dataTransfer.setData("text/uri-list", bookmarkletCode);
+		e.dataTransfer.setData("text/plain", bookmarkletCode);
+		e.dataTransfer.effectAllowed = "link";
 	};
-
-	// 处理 mark 输入变化
-	const handleMarkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// 移除特殊字符，只允许字母、数字、下划线和连字符
-		const cleanedValue = e.target.value.replace(/[^a-zA-Z0-9_-]/g, "");
-		setMark(cleanedValue);
-	};
-
-	// 处理复制URL
-	// TODO: implement button
-	// const handleCopyUrl = () => {
-	// 	navigator.clipboard.writeText(`${baseUrl}/${mark}`);
-	// 	setCopied(true);
-	// 	setTimeout(() => setCopied(false), 2000);
-	// };
-
-	if (!mark) {
-		return (
-			<div className="container flex items-center justify-center min-h-screen">
-				<div className="fade-in text-center">
-					<p className="text-muted-foreground">{t("loading")}</p>
-				</div>
-			</div>
-		);
-	}
 
 	return (
 		<div className="relative">
@@ -288,51 +233,11 @@ export const Doc = () => {
 
 							{/* 书签集合名称输入 */}
 							<div className="my-8 space-y-6">
-								<div className="space-y-4">
-									<h3 className="text-lg font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-purple-500 flex items-center">
-										<span className="w-6 h-6 inline-flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 mr-2 text-sm">
-											1
-										</span>
-										{t("DocPage.setup.markName.title")}
-									</h3>
-									<div className="bg-white/50 dark:bg-slate-900/50 rounded-lg p-5 border border-indigo-100 dark:border-indigo-900/30">
-										<div className="space-y-3">
-											<div className="flex items-center space-x-2">
-												<Input
-													id="mark-input"
-													placeholder={t("DocPage.setup.markName.placeholder")}
-													value={mark}
-													onChange={handleMarkChange}
-													className="flex-1 border-indigo-500/20 focus:border-indigo-500/40 bg-white dark:bg-slate-800 focus:ring-indigo-500/10"
-												/>
-												<div className="hover-scale">
-													<Button
-														variant="outline"
-														onClick={handleGenerateRandom}
-														disabled={isGenerating}
-														className="border-indigo-500/20 hover:border-indigo-500/40 bg-white dark:bg-slate-800 hover:bg-indigo-500/10 transition-all duration-200"
-													>
-														{isGenerating ? (
-															<RefreshCcw className="h-4 w-4 animate-spin" />
-														) : (
-															<Wand2 className="h-4 w-4 mr-1" />
-														)}
-														{t("DocPage.setup.markName.button")}
-													</Button>
-												</div>
-											</div>
-											<p className="text-sm text-muted-foreground">
-												{t("DocPage.setup.markName.description")}
-											</p>
-										</div>
-									</div>
-								</div>
-
 								{/* 书签按钮部分 */}
 								<div className="space-y-4">
 									<h3 className="text-lg font-medium bg-clip-text text-transparent bg-linear-to-r from-indigo-500 to-purple-500 flex items-center">
 										<span className="w-6 h-6 inline-flex items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 mr-2 text-sm">
-											2
+											1
 										</span>
 										{t("DocPage.setup.bookmarklet.title")}
 									</h3>
@@ -342,28 +247,25 @@ export const Doc = () => {
 												<button
 													type="button"
 													draggable={true}
-													ref={(node) => {
-														if (node) {
-															node.setAttribute("href", bookmarkletCode);
-														}
-													}}
+													onDragStart={handleDragStart}
 													onClick={(e) => e.preventDefault()}
 													className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-linear-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700 h-10 px-5 py-2 select-all cursor-move shadow-md hover:shadow-lg transition-all duration-200"
+													title={t("BookmarksPage.bookmarkletTip")}
 												>
 													<Bookmark className="mr-2 h-4 w-4" />
-													{t("DocPage.setup.bookmarklet.saveButton", { mark })}
+													{t("DocPage.setup.bookmarklet.saveButton")}
 												</button>
 											</div>
 
 											<div className="hover-scale">
 												<a
-													href={`${baseUrl}/${mark}`}
+													href={`${baseUrl}`}
 													draggable={true}
 													className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-5 py-2 select-all cursor-move shadow-xs hover:shadow-md transition-all duration-200"
 													suppressHydrationWarning
 												>
 													<ExternalLink className="mr-2 h-4 w-4" />
-													{t("DocPage.setup.bookmarklet.openButton", { mark })}
+													{t("DocPage.setup.bookmarklet.openButton")}
 												</a>
 											</div>
 
@@ -482,7 +384,6 @@ export const Doc = () => {
 											<p className="mb-0 text-slate-600 dark:text-slate-300">
 												{t("DocPage.usage.steps.access.description", {
 													baseUrl,
-													mark,
 													code: (chunks: ReactNode) => (
 														<code className="bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded text-emerald-700 dark:text-emerald-300 text-sm">
 															{chunks}
@@ -536,15 +437,18 @@ export const Doc = () => {
 							<p className="text-muted-foreground mb-6">
 								{t("DocPage.demo.description")}
 							</p>
-							<Link href="/demo" className="inline-block hover-scale">
+							<a
+								href="https://cloudmark.site/demo"
+								className="inline-block hover-scale"
+							>
 								<Button
 									size="lg"
 									className="gap-2 bg-linear-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white transition-all duration-200"
 								>
 									{t("DocPage.demo.button")}
-									<ChevronRight className="h-4 w-4" />
+									<ExternalLink className="h-4 w-4" />
 								</Button>
-							</Link>
+							</a>
 						</div>
 					</section>
 				</div>

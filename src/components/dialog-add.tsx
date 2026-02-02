@@ -1,4 +1,3 @@
-import type { NonEmptyString100 } from "@evolu/common";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	CheckCircle,
@@ -15,7 +14,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useCreateBookmark } from "../hooks/use-bookmarks";
-import { insertSchema, type InsertSchema } from "../lib/schema";
+import { type InsertSchema, insertSchema } from "../lib/schema";
 import type { BookmarkInstance } from "../lib/types";
 import { useToast } from "./toast-provider";
 import { Button } from "./ui/button";
@@ -49,16 +48,11 @@ import {
 import { Textarea } from "./ui/textarea";
 
 interface DialogCreateProps {
-	mark: string;
 	categories: string[];
 	onBookmarkAdded: (bookmark: BookmarkInstance) => void;
 }
 
-export function DialogAdd({
-	mark,
-	categories,
-	onBookmarkAdded,
-}: DialogCreateProps) {
+export function DialogAdd({ categories, onBookmarkAdded }: DialogCreateProps) {
 	const { t } = useTranslation();
 	const { showToast } = useToast();
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,7 +65,6 @@ export function DialogAdd({
 	const form = useForm<InsertSchema>({
 		resolver: zodResolver(insertSchema),
 		defaultValues: {
-			mark,
 			url: "",
 			title: "",
 			description: "",
@@ -113,7 +106,6 @@ export function DialogAdd({
 			const categoryValue = isCreatingNewCategory ? newCategory : data.category;
 			const bookmark = createBookmark({
 				...data,
-				mark: data.mark as NonEmptyString100,
 				category: categoryValue,
 			});
 

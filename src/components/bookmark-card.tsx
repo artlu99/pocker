@@ -17,7 +17,6 @@ import { DialogEdit } from "./dialog-edit";
 
 interface BookmarkCardProps {
 	bookmark: BookmarkInstance;
-	mark: string;
 	categories: string[];
 	onBookmarkUpdated: (bookmark: BookmarkInstance) => void;
 	onBookmarkDeleted: () => void;
@@ -25,7 +24,6 @@ interface BookmarkCardProps {
 
 export const BookmarkCard = memo(function BookmarkCard({
 	bookmark,
-	mark,
 	categories,
 	onBookmarkUpdated,
 	onBookmarkDeleted,
@@ -79,7 +77,10 @@ export const BookmarkCard = memo(function BookmarkCard({
 						<h3 className="font-medium text-sm truncate" title={title}>
 							{title}
 						</h3>
-						<p className="text-xs text-muted-foreground truncate" title={displayUrl}>
+						<p
+							className="text-xs text-muted-foreground truncate"
+							title={displayUrl}
+						>
 							{domain}
 						</p>
 					</div>
@@ -122,7 +123,6 @@ export const BookmarkCard = memo(function BookmarkCard({
 					<div className="flex space-x-2 shrink-0">
 						<div className="hover-scale">
 							<DialogEdit
-								mark={mark}
 								bookmark={bookmark}
 								categories={categories}
 								onBookmarkUpdated={onBookmarkUpdated}
@@ -130,7 +130,6 @@ export const BookmarkCard = memo(function BookmarkCard({
 						</div>
 						<div className="hover-scale">
 							<DialogDelete
-								mark={mark}
 								bookmark={bookmark}
 								onBookmarkDeleted={onBookmarkDeleted}
 							/>

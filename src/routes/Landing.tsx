@@ -79,10 +79,10 @@ export const Landing = () => {
 							variant="outline"
 							className="rounded-full text-base px-8"
 						>
-							<Link href="/demo" className="flex items-center gap-2">
+							<a href="https://cloudmark.site/demo" className="flex items-center gap-2">
 								Demo
 								<ExternalLink className="h-4 w-4" />
-							</Link>
+							</a>
 						</Button>
 					</div>
 				</div>

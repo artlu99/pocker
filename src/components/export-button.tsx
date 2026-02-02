@@ -2,15 +2,14 @@ import { Download } from "lucide-react";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import type { BookmarkInstance, BookmarksData } from "../lib/types.ts";
-import { Button } from "./ui/button.tsx";
 import { useToast } from "./toast-provider.tsx";
+import { Button } from "./ui/button.tsx";
 
 export interface ExportButtonProps {
 	bookmarksData: BookmarksData | null;
-	mark: string;
 }
 
-export const ExportButton = ({ bookmarksData, mark }: ExportButtonProps) => {
+export const ExportButton = ({ bookmarksData }: ExportButtonProps) => {
 	const { t } = useTranslation();
 	const { showToast } = useToast();
 
@@ -43,13 +42,13 @@ export const ExportButton = ({ bookmarksData, mark }: ExportButtonProps) => {
 <TITLE>Bookmarks</TITLE>
 <H1>Bookmarks</H1>
 <DL><p>
-    <DT><H3 ADD_DATE="${Math.floor(Date.now() / 1000)}" LAST_MODIFIED="${Math.floor(Date.now() / 1000)}">${mark} Bookmarks</H3>
+    <DT><H3 ADD_DATE="${Math.floor(Date.now() / 1000)}" LAST_MODIFIED="${Math.floor(Date.now() / 1000)}">Bookmarks</H3></DT>
     <DL><p>`;
 
 		// Add bookmarks grouped by category
 		for (const [category, bookmarks] of Object.entries(bookmarksByCategory)) {
 			htmlContent += `
-        <DT><H3 ADD_DATE="${Math.floor(Date.now() / 1000)}" LAST_MODIFIED="${Math.floor(Date.now() / 1000)}">${category}</H3>
+        <DT><H3 ADD_DATE="${Math.floor(Date.now() / 1000)}" LAST_MODIFIED="${Math.floor(Date.now() / 1000)}">${category}</H3></DT>
         <DL><p>`;
 			
 			for (const bookmark of bookmarks) {
@@ -58,29 +57,29 @@ export const ExportButton = ({ bookmarksData, mark }: ExportButtonProps) => {
 				const url = bookmark.url.startsWith('http') ? bookmark.url : `https://${bookmark.url}`;
 				
 				htmlContent += `
-            <DT><A HREF="${url}" ADD_DATE="${addDate}" LAST_MODIFIED="${lastModified}" ICON="${bookmark.favicon || ''}">${bookmark.title}</A>`;
+            <DT><A HREF="${url}" ADD_DATE="${addDate}" LAST_MODIFIED="${lastModified}" ICON="${bookmark.favicon || ''}">${bookmark.title}</A></DT>`;
 			}
 			
 			htmlContent += `
-        </DL><p>`;
+        </p></DL>`;
 		}
 
 		htmlContent += `
-    </DL><p>
-</DL><p>`;
+    </p></DL>
+</p></DL>`;
 
 		// Create and download the file
 		const blob = new Blob([htmlContent], { type: 'text/html' });
 		const url = URL.createObjectURL(blob);
 		const a = document.createElement('a');
 		a.href = url;
-		a.download = `${mark}-bookmarks.html`;
+		a.download = "localmark.html";
 		document.body.appendChild(a);
 		a.click();
 		document.body.removeChild(a);
 		URL.revokeObjectURL(url);
 
-	}, [bookmarksData, mark, showToast, t]);
+	}, [bookmarksData, showToast, t]);
 
 	// Don't render if no bookmarks
 	if (!bookmarksData || bookmarksData.bookmarks.length === 0) {

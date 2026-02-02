@@ -1,22 +1,20 @@
-import { SimpleName, createAppOwner, createEvolu, getOrThrow } from "@evolu/common";
-import { NonEmptyString100, NonEmptyString1000, id, nullOr, Mnemonic } from "@evolu/common";
+import {
+	createEvolu,
+	createFormatTypeError,
+	id,
+	type MaxLengthError,
+	type MinLengthError,
+	NonEmptyString100,
+	NonEmptyString1000,
+	nullOr
+} from "@evolu/common";
 import { evoluReactWebDeps } from "@evolu/react-web";
-import { APP_OWNER_MNEMONIC, EVOLU_INSTANCE } from "./constants";
-
-const AboutId = id("About");
-type AboutId = typeof AboutId.Type;
 
 const BookmarkId = id("Bookmark");
-type BookmarkId = typeof BookmarkId.Type;
 
 const Schema = {
-	about: {
-		id: AboutId,
-		version: NonEmptyString100,
-	},
 	bookmark: {
 		id: BookmarkId,
-		mark: NonEmptyString100,
 		url: NonEmptyString1000,
 		title: NonEmptyString1000,
 		favicon: nullOr(NonEmptyString100),
@@ -25,12 +23,33 @@ const Schema = {
 	},
 };
 
-const evoluName = getOrThrow(SimpleName.from(EVOLU_INSTANCE));
-const appOwnerMnemonic = getOrThrow(Mnemonic.from(APP_OWNER_MNEMONIC));
 export const evoluInstance = createEvolu(evoluReactWebDeps)(Schema, {
-	name: evoluName,
-	initialAppOwner: createAppOwner(appOwnerMnemonic),
-	onInit: ({ isFirst }) => {
-		isFirst && evoluInstance.insert("about", { version: "1.0.0" });
-	},
+	transports: [
+		{ type: "WebSocket", url: "wss://evolu-relay-1.artlu.xyz" },
+		{ type: "WebSocket", url: "wss://free.evoluhq.com" },
+	],
+});
+
+/**
+ * Formats Evolu Type errors into user-friendly messages.
+ *
+ * Evolu Type typed errors ensure every error type used in schema must have a
+ * formatter. TypeScript enforces this at compile-time, preventing unhandled
+ * validation errors from reaching users.
+ *
+ * The `createFormatTypeError` function handles both built-in and custom errors,
+ * and lets us override default formatting for specific errors.
+ *
+ * Click on `createFormatTypeError` below to see how to write your own
+ * formatter.
+ */
+export const formatTypeError = createFormatTypeError<
+	MinLengthError | MaxLengthError
+>((error): string => {
+	switch (error.type) {
+		case "MinLength":
+			return `Text must be at least ${error.min} character${error.min === 1 ? "" : "s"} long`;
+		case "MaxLength":
+			return `Text is too long (maximum ${error.max} characters)`;
+	}
 });

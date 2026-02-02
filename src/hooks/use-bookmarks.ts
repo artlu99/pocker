@@ -1,33 +1,18 @@
-import type { NonEmptyString100 } from "@evolu/common";
+import { sqliteTrue } from "@evolu/common";
 import { createUseEvolu, useQuery } from "@evolu/react";
 import { useCallback } from "react";
-import { DEMO_BOOKMARKS_DATA } from "../lib/demo_data";
 import { evoluInstance } from "../lib/evolu";
 import type { BookmarkInstance } from "../lib/types";
-import { isDemoMark, stripUrlProtocol } from "../lib/utils";
+import { stripUrlProtocol } from "../lib/utils";
 
 const useEvolu = createUseEvolu(evoluInstance);
 
-export const useBookmarks = (mark: NonEmptyString100) => {
-	if (isDemoMark(mark)) {
-		return DEMO_BOOKMARKS_DATA;
-	}
-
-	const aboutQuery = evoluInstance.createQuery((db) =>
-		db.selectFrom("about").select(["version"]).limit(1),
-	);
-	const aboutData = useQuery(aboutQuery);
-
-	if (!aboutData || aboutData.length === 0) {
-		return null;
-	}
-
+export const useBookmarks = () => {
 	const bookmarksQuery = evoluInstance.createQuery((db) =>
 		db
 			.selectFrom("bookmark")
 			.select([
 				"id",
-				"mark",
 				"url",
 				"title",
 				"favicon",
@@ -37,14 +22,13 @@ export const useBookmarks = (mark: NonEmptyString100) => {
 				"updatedAt",
 			])
 			.where("isDeleted", "is", null)
-			.where("mark", "is", mark)
 			.orderBy("updatedAt", "desc")
 			.limit(100),
 	);
 	const rows = useQuery(bookmarksQuery);
-	return rows
+
+	return (rows && rows.length > 0)
 		? {
-			mark,
 			bookmarks: rows.map((row) => {
 				const {
 					id,
@@ -75,11 +59,7 @@ export const useCreateBookmark = () => {
 	const { insert } = useEvolu();
 
 	return useCallback(
-		(
-			bookmark: Omit<BookmarkInstance, "id" | "createdAt" | "updatedAt"> & {
-				mark: NonEmptyString100;
-			},
-		): BookmarkInstance => {
+		(bookmark: Omit<BookmarkInstance, "id" | "createdAt" | "updatedAt">): BookmarkInstance => {
 			const now = new Date().toISOString();
 
 			// Transform URL to Base64Url format (strip protocol)
@@ -88,15 +68,6 @@ export const useCreateBookmark = () => {
 				url: stripUrlProtocol(bookmark.url),
 			};
 
-			if (isDemoMark(bookmark.mark)) {
-				// Add timestamp, UUID for demo mode
-				return {
-					...transformedBookmark,
-					id: crypto.randomUUID(),
-					createdAt: now,
-					updatedAt: now,
-				};
-			}
 			// strip empty description for Evolu schema
 			const { description, ...bookmarkWithoutDescription } =
 				transformedBookmark;
@@ -108,7 +79,7 @@ export const useCreateBookmark = () => {
 			);
 			if (!result.ok) {
 				console.error(result.error);
-				throw new Error(`Unable to insert for ${bookmark.mark}`);
+				throw new Error("Unable to insert bookmark");
 			}
 			return {
 				...bookmark,
@@ -125,19 +96,13 @@ export const useUpdateBookmark = () => {
 	const { update } = useEvolu();
 
 	return useCallback(
-		(bookmark: BookmarkInstance & { mark: string }): BookmarkInstance => {
+		(bookmark: BookmarkInstance): BookmarkInstance => {
 			// Transform URL to Base64Url format (strip protocol)
 			const transformedBookmark = {
 				...bookmark,
 				url: stripUrlProtocol(bookmark.url),
 			};
 
-			if (isDemoMark(bookmark.mark)) {
-				return {
-					...transformedBookmark,
-					updatedAt: new Date().toISOString(),
-				};
-			}
 			const {
 				createdAt,
 				updatedAt,
@@ -154,7 +119,7 @@ export const useUpdateBookmark = () => {
 			// TODO: handle error in optimistic UI
 			if (!res.ok) {
 				console.error(res.error);
-				throw new Error(`Unable to to update ${bookmark.mark}: ${bookmark.id}`);
+				throw new Error(`Unable to to update bookmark: ${bookmark.id}`);
 			}
 			return bookmark;
 		},
@@ -166,11 +131,8 @@ export const useDeleteBookmark = () => {
 	const { update } = useEvolu();
 
 	return useCallback(
-		({ mark, id }: { mark: string; id: string }): void => {
-			if (isDemoMark(mark)) {
-				return; // Skip server update for demo mode
-			}
-			update("bookmark", { id, isDeleted: true });
+		({ id }: { id: string }): void => {
+			update("bookmark", { id, isDeleted: sqliteTrue });
 		},
 		[update],
 	);

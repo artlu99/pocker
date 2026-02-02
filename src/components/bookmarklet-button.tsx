@@ -1,24 +1,14 @@
 import { BookmarkPlus } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useState, useCallback, useEffect } from "react";
 
 interface BookmarkletButtonProps {
-	mark: string;
 	baseUrl: string;
 }
 
-export function BookmarkletButton({ mark, baseUrl }: BookmarkletButtonProps) {
+export function BookmarkletButton({ baseUrl }: BookmarkletButtonProps) {
 	const { t } = useTranslation();
-	const [bookmarkletCode, setBookmarkletCode] = useState("");
 
-	const generateBookmarkletCode = useCallback(() => {
-		const code = `javascript:(function(){let m='${mark}',u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open('${baseUrl}/api/add?mark='+m+'&title='+t+'&url='+u, '_blank').focus()})()`;
-		setBookmarkletCode(code);
-	}, [mark, baseUrl]);
-
-	useEffect(() => {
-		generateBookmarkletCode();
-	}, [generateBookmarkletCode]);
+	const bookmarkletCode = `javascript:(function(){u=encodeURIComponent(location.href),t=encodeURIComponent(document.title);window.open('${baseUrl}/api/add?title='+t+'&url='+u, '_blank').focus()})()`;
 
 	const handleDragStart = (e: React.DragEvent) => {
 		e.dataTransfer.setData("text/uri-list", bookmarkletCode);
@@ -37,7 +27,7 @@ export function BookmarkletButton({ mark, baseUrl }: BookmarkletButtonProps) {
 				title={t("BookmarksPage.bookmarkletTip")}
 			>
 				<BookmarkPlus className="h-4 w-4 mr-2 text-blue-500" />
-				{t("BookmarksPage.saveButton", { mark })}
+				{t("BookmarksPage.saveButton")}
 			</button>
 		</div>
 	);

@@ -22,17 +22,14 @@ export const baseSchema = z.object({
 
 export const insertSchema = z.object({
 	...baseSchema.shape,
-	mark: z.string().min(1).max(100),
 });
 
 export const updateSchema = z.object({
 	...baseSchema.shape,
-	mark: z.string().min(1),
 	id: z.string().min(1),
 });
 
 export const deleteSchema = z.object({
-	mark: z.string().min(1),
 	id: z.string().min(1),
 });
 

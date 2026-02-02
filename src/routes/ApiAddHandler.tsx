@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "wouter";
-import { useTranslation } from "react-i18next";
 import { CheckCircle, ExternalLink, Loader2, XCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useSearchParams } from "wouter";
 import { useCreateBookmark } from "../hooks/use-bookmarks";
-import { getBaseUrl } from "../lib/utils";
-import type { NonEmptyString100 } from "@evolu/common";
+import { DEFAULT_CATEGORY, getBaseUrl } from "../lib/utils";
 
 export const ApiAddHandler = () => {
 	const { t } = useTranslation();
@@ -20,13 +19,12 @@ export const ApiAddHandler = () => {
 		const handleApiCall = async () => {
 			try {
 				// Parse query parameters
-				const mark = urlParams.get("mark");
 				const title = urlParams.get("title");
 				const url = urlParams.get("url");
 
 				// Validate required parameters
-				if (!mark || !title || !url) {
-					throw new Error("Missing required parameters: mark, title, or url");
+				if (!title || !url) {
+					throw new Error("Missing required parameters: title, or url");
 				}
 
 				// Validate URL format
@@ -38,21 +36,20 @@ export const ApiAddHandler = () => {
 
 				// Create the bookmark
 				createBookmark({
-					mark: mark as NonEmptyString100,
 					url,
 					title,
-					category: "uncategorized", // Default category
+					category: DEFAULT_CATEGORY,
 					description: "", // Optional description
 				});
 
 				// Set success state
 				setStatus("success");
 				setMessage("Bookmark added successfully!");
-				setRedirectUrl(`${getBaseUrl()}/${mark}`);
+				setRedirectUrl(getBaseUrl());
 
 				// Auto-redirect after 3 seconds
 				setTimeout(() => {
-					window.location.href = `${getBaseUrl()}/${mark}`;
+					window.location.href = getBaseUrl();
 				}, 3000);
 			} catch (error) {
 				console.error("Failed to add bookmark:", error);
